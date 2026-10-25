@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Atelier Freelance – clients, devis, factures, revenus</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef1f4;--sf:#fff;--ink:#16202b;--mut:#5d6b7a;--ln:#d8dfe6;--ac:#2f5bea;--acs:#e3eaff;--am:#f2b134;--rd:#d1495b;--gn:#2a8f6a;--bt:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#11171e;--sf:#1a222c;--ink:#e8edf2;--mut:#93a1b0;--ln:#2c3744;--ac:#7c9cff;--acs:#22304f;--rd:#ff7a8a;--gn:#4cc79b;--bt:#0d1320;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#11171e;--sf:#1a222c;--ink:#e8edf2;--mut:#93a1b0;--ln:#2c3744;--ac:#7c9cff;--acs:#22304f;--rd:#ff7a8a;--gn:#4cc79b;--bt:#0d1320;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 Figtree,system-ui,sans-serif}
+h1,h2{font-family:"Bricolage Grotesque",Figtree,system-ui,sans-serif;margin:0;line-height:1.15}
+h1{font-size:2rem}h2{font-size:1.15rem}
+button,input,select,textarea{font:inherit;color:inherit}
+.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+nav{background:var(--sf);border-right:1px solid var(--ln);padding:20px 14px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh}
+.logo{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:1.35rem;padding:0 10px 16px}
+.logo i{display:inline-block;width:12px;height:12px;background:var(--am);border-radius:3px;margin-right:8px;transform:rotate(12deg)}
+nav button{all:unset;cursor:pointer;padding:10px 12px;border-radius:8px;color:var(--mut);font-weight:500;display:flex;justify-content:space-between}
+nav button:hover{background:var(--bg)}
+nav button[aria-current="page"]{background:var(--acs);color:var(--ac);font-weight:600}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+main{padding:32px clamp(16px,4vw,48px);max-width:980px;width:100%}
+.sub{color:var(--mut);margin:6px 0 24px}
+.box{background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:16px;margin-bottom:16px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+input,select,textarea{background:var(--bg);border:1px solid var(--ln);border-radius:8px;padding:9px 11px;min-width:0}
+input[type=text],input[type=number]{flex:1 1 130px}
+.btn{background:var(--ac);color:var(--bt);border:0;border-radius:8px;padding:9px 16px;font-weight:600;cursor:pointer}
+.btn.alt{background:var(--sf);color:var(--ink);border:1px solid var(--ln)}
+.btn.sm{padding:5px 10px;font-size:.88rem;font-weight:500}
+.btn.ghost{background:transparent;color:var(--mut);border:1px solid var(--ln);padding:5px 10px;font-weight:500}
+.btn.ghost:hover{color:var(--rd);border-color:var(--rd)}
+.item{display:flex;align-items:center;gap:12px;padding:11px 4px;border-bottom:1px solid var(--ln);flex-wrap:wrap}
+.item:last-child{border:0}
+.t{flex:1 1 180px;min-width:0;overflow-wrap:anywhere}
+.done .t{text-decoration:line-through;color:var(--mut)}
+.tag{font-size:.8rem;padding:2px 9px;border-radius:99px;background:var(--acs);color:var(--ac);font-weight:600}
+.small{color:var(--mut);font-size:.88rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:20px}
+.stat{background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:16px}
+.stat b{display:block;font:700 1.7rem "Bricolage Grotesque",sans-serif}
+.bar{height:12px;background:var(--bg);border-radius:99px;overflow:hidden;margin:10px 0 6px}
+.bar i{display:block;height:100%;background:var(--gn);border-radius:99px}
+.pos{color:var(--gn)}.neg{color:var(--rd)}
+.empty{color:var(--mut);padding:18px 4px}
+.lines{display:grid;grid-template-columns:3fr 1fr 1fr;gap:8px;width:100%}
+.lines input{width:100%}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.col{background:var(--bg);border-radius:10px;padding:10px}
+.col h2{font-size:.95rem;margin-bottom:8px}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:8px;padding:9px;margin-bottom:8px}
+@media (max-width:720px){.app{grid-template-columns:1fr}
+nav{position:static;height:auto;flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--ln);padding:10px}
+.logo{display:none}nav button{white-space:nowrap;gap:8px}}
+.app.solo{grid-template-columns:1fr}.app.solo nav{display:none}
+</style>
+</head>
+<body>
+<div class="app"><nav id="nav" aria-label="Sections"></nav><main id="main"></main></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+const SB_URL="https://pitjolrfodfbxojkhvre.supabase.co",SB_KEY="sb_publishable_Nw2-Jj_QVqX864Gc5Rlxyw_jEN0RUIG";
+const sb=window.supabase.createClient(SB_URL,SB_KEY);
+const def=()=>({cur:"€",goal:2000,me:"",clients:[],docs:[],taches:[]});
+let S=def(),view="accueil",payLink="",user=null,actif=false,ready=false,msg="",tm=null;
+function save(){clearTimeout(tm);tm=setTimeout(async()=>{if(!user||!actif)return;try{const{error}=await sb.from("donnees").upsert({user_id:user.id,data:S,updated_at:new Date().toISOString()});if(error)console.error(error)}catch(x){console.error(x)}},600)}
+function vAuth(){return `<div style="max-width:420px;margin:8vh auto 0"><h1>Atelier Freelance</h1><p class="sub">Connectez-vous ou créez votre compte.</p>
+<form class="box" data-form="auth"><div class="row"><input type="email" name="email" placeholder="E-mail" required autocomplete="email" aria-label="E-mail" style="flex:1 1 100%"><input type="password" name="pw" placeholder="Mot de passe (8 caractères minimum)" required minlength="8" autocomplete="current-password" aria-label="Mot de passe" style="flex:1 1 100%"></div>
+<div class="row" style="margin-top:12px"><button class="btn" name="mode" value="in">Se connecter</button><button class="btn alt" name="mode" value="up">Créer un compte</button></div>${msg?`<p class="small" role="status">${esc(msg)}</p>`:""}</form></div>`}
+function vLock(){return vAbo()+'<div class="box"><p class="small">Après votre paiement, votre accès est activé manuellement. Appuyez ensuite sur « Actualiser mon accès ».</p><div class="row"><button class="btn alt" id="refresh">Actualiser mon accès</button><button class="btn ghost" id="out">Se déconnecter</button></div></div>'}
+async function doAuth(d,mode){
+  msg="Un instant…";render();
+  try{
+    if(mode==="up"){const{data,error}=await sb.auth.signUp({email:d.email.trim(),password:d.pw});
+      if(error)msg="Inscription impossible : "+error.message;
+      else if(!data.session)msg="Compte créé. Vérifiez votre e-mail pour confirmer, puis connectez-vous.";else msg=""}
+    else{const{error}=await sb.auth.signInWithPassword({email:d.email.trim(),password:d.pw});msg=error?"E-mail ou mot de passe incorrect.":""}
+  }catch(x){msg="Connexion impossible. Vérifiez votre réseau et réessayez."}
+  render();
+}
+async function loadUser(session){
+  if(session&&user&&session.user.id===user.id&&actif)return;
+  user=session?session.user:null;actif=false;S=def();
+  if(user){
+    try{
+      const a=await sb.from("abonnes").select("actif").eq("user_id",user.id).maybeSingle();
+      actif=!!(a.data&&a.data.actif);
+      if(actif){const r=await sb.from("donnees").select("data").eq("user_id",user.id).maybeSingle();S=Object.assign(def(),(r.data&&r.data.data)||{})}
+    }catch(x){console.error(x)}
+  }
+  ready=true;render();
+}
+sb.auth.onAuthStateChange((ev,session)=>{if(ev==="INITIAL_SESSION"||ev==="SIGNED_IN"||ev==="SIGNED_OUT")setTimeout(()=>loadUser(session),0)});
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const today=()=>new Date().toISOString().slice(0,10);
+const money=n=>n.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" "+esc(S.cur);
+const total=d=>d.lines.reduce((a,l)=>a+l.q*l.p,0);
+const cname=id=>(S.clients.find(c=>c.id===id)||{nom:"Client supprimé"}).nom;
+const STAGES=["Prospect","Devis envoyé","En cours","Terminé"];
+const STAT=["brouillon","envoyé","payé"];
+const SECT=[["accueil","Tableau de bord"],["clients","Clients"],["docs","Devis & factures"],["taches","Tâches"],["abo","S’abonner"],["reglages","Réglages"]];
+
+function nav(){
+  const n={clients:S.clients.length,docs:S.docs.length,taches:S.taches.filter(t=>!t.ok).length};
+  document.getElementById("nav").innerHTML='<div class="logo"><i></i>Atelier</div>'+SECT.map(([k,l])=>`<button data-v="${k}" ${view===k?'aria-current="page"':""}><span>${l}</span>${n[k]?`<span class="small">${n[k]}</span>`:""}</button>`).join("");
+}
+function go(v){view=v;render();window.scrollTo(0,0)}
+function render(){
+  const app=document.querySelector(".app"),mn=document.getElementById("main");
+  const gate=!ready?'<p class="empty">Chargement…</p>':!user?vAuth():!actif?vLock():null;
+  app.classList.toggle("solo",gate!==null);
+  if(gate!==null){mn.innerHTML=gate;return}
+  nav();mn.innerHTML=({accueil:vAccueil,clients:vClients,docs:vDocs,taches:vTaches,abo:vAbo,reglages:vReglages})[view]()}
+
+function vAccueil(){
+  const m=today().slice(0,7),fa=S.docs.filter(d=>d.type==="facture");
+  const rev=fa.filter(d=>d.st==="payé"&&(d.paid||"").slice(0,7)===m).reduce((a,d)=>a+total(d),0);
+  const att=fa.filter(d=>d.st==="envoyé").reduce((a,d)=>a+total(d),0);
+  const act=S.clients.filter(c=>c.stage==="En cours").length;
+  const pct=S.goal>0?Math.min(100,Math.round(rev/S.goal*100)):0;
+  const due=fa.filter(d=>d.st==="envoyé");
+  return `<h1>Tableau de bord</h1><p class="sub">Votre activité de freelance en un coup d’œil.</p>
+  <div class="box"><h2>Objectif du mois : ${money(S.goal)}</h2><div class="bar" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pct}%"></i></div><span class="small">${money(rev)} encaissés (${pct} %). Reste ${money(Math.max(0,S.goal-rev))}.</span></div>
+  <div class="stats"><div class="stat"><b class="pos">${money(rev)}</b>encaissé ce mois-ci</div><div class="stat"><b>${money(att)}</b>en attente de paiement</div><div class="stat"><b>${act}</b>mission${act>1?"s":""} en cours</div></div>
+  <div class="box"><h2>Factures à relancer</h2>${due.length?due.map(d=>`<div class="item"><span class="t"><b>${esc(d.num)}</b> · ${esc(cname(d.cid))}</span><b>${money(total(d))}</b><button class="btn sm" data-paid="${d.id}">Marquer payée</button></div>`).join(""):'<div class="empty">Aucune facture en attente. Créez-en une dans « Devis & factures ».</div>'}</div>`;
+}
+
+function vClients(){
+  return `<h1>Clients</h1><p class="sub">Suivez chaque contact de la prospection à la fin de mission.</p>
+  <form class="box row" data-form="client"><input type="text" name="nom" placeholder="Nom ou entreprise" required aria-label="Nom"><input type="text" name="info" placeholder="E-mail ou téléphone" aria-label="Coordonnées"><button class="btn">Ajouter le client</button></form>
+  ${S.clients.length?`<div class="cols">${STAGES.map(s=>`<div class="col"><h2>${s} (${S.clients.filter(c=>c.stage===s).length})</h2>${S.clients.filter(c=>c.stage===s).map(c=>`<div class="card"><b>${esc(c.nom)}</b><br><span class="small">${esc(c.info)}</span><div class="row" style="margin-top:6px"><select data-stage="${c.id}" aria-label="Étape">${STAGES.map(x=>`<option ${x===s?"selected":""}>${x}</option>`).join("")}</select><button class="btn ghost" data-del="clients:${c.id}" aria-label="Supprimer">✕</button></div></div>`).join("")}</div>`).join("")}</div>`:'<div class="empty">Aucun client pour l’instant. Ajoutez votre premier prospect.</div>'}`;
+}
+
+function vDocs(){
+  const ro=S.clients.length?"":"disabled";
+  return `<h1>Devis & factures</h1><p class="sub">Créez un document, suivez son statut, copiez-le pour l’envoyer.</p>
+  ${S.clients.length?"":'<div class="box">Ajoutez d’abord un client dans la section « Clients ».</div>'}
+  <form class="box" data-form="doc"><div class="row" style="margin-bottom:10px"><select name="type" aria-label="Type"><option value="devis">Devis</option><option value="facture">Facture</option></select>
+  <select name="cid" aria-label="Client" required>${S.clients.map(c=>`<option value="${c.id}">${esc(c.nom)}</option>`).join("")}</select></div>
+  <div class="lines">${[0,1,2].map(i=>`<input type="text" name="l${i}" placeholder="Prestation ${i+1}" aria-label="Prestation ${i+1}" ${i?"":"required"}><input type="number" name="q${i}" placeholder="Qté" min="0" step="any" value="1" aria-label="Quantité"><input type="number" name="p${i}" placeholder="Prix" min="0" step="0.01" aria-label="Prix unitaire">`).join("")}</div>
+  <div style="margin-top:12px"><button class="btn" ${ro}>Créer le document</button></div></form>
+  <div class="box">${S.docs.length?S.docs.map(d=>`<div class="item"><span class="t"><b>${esc(d.num)}</b> · ${esc(cname(d.cid))}<br><span class="small">${esc(d.date)} · ${d.lines.map(l=>esc(l.d)).join(", ")}</span></span><b>${money(total(d))}</b>
+  <select data-st="${d.id}" aria-label="Statut">${STAT.map(s=>`<option ${s===d.st?"selected":""}>${s}</option>`).join("")}</select>
+  ${d.type==="devis"?`<button class="btn alt sm" data-conv="${d.id}">En facture</button>`:""}<button class="btn alt sm" data-copy="${d.id}">Copier</button><button class="btn ghost" data-del="docs:${d.id}" aria-label="Supprimer">✕</button></div>`).join(""):'<div class="empty">Aucun document. Créez votre premier devis ci-dessus.</div>'}</div>`;
+}
+
+function vTaches(){
+  return `<h1>Tâches</h1><p class="sub">Relances, livrables, démarches.</p>
+  <form class="box row" data-form="tache"><input type="text" name="txt" placeholder="Que faut-il faire ?" required aria-label="Tâche"><input type="date" name="date" aria-label="Échéance"><button class="btn">Ajouter</button></form>
+  <div class="box">${S.taches.length?S.taches.map(t=>`<div class="item ${t.ok?"done":""}"><input type="checkbox" data-chk="${t.id}" ${t.ok?"checked":""} aria-label="Terminée"><span class="t">${esc(t.txt)}</span>${t.date?`<span class="small">${esc(t.date)}</span>`:""}<button class="btn ghost" data-del="taches:${t.id}" aria-label="Supprimer">✕</button></div>`).join(""):'<div class="empty">Aucune tâche. Notez la prochaine relance client.</div>'}</div>`;
+}
+
+const PAY={num:"+228 91 29 43 45",wa:"22891294345",price:"2 000 FCFA"};
+function vAbo(){
+  return `<h1>S’abonner</h1><p class="sub">Accès complet à Atelier Freelance, ${PAY.price} par mois.</p>
+  <div class="box"><h2>1. Envoyez le paiement</h2><p>Transférez <b>${PAY.price}</b> par mobile money au numéro :</p><p style="font:700 1.6rem 'Bricolage Grotesque',sans-serif;margin:8px 0">${PAY.num}</p><button class="btn alt" id="cpn">Copier le numéro</button><p class="small">Gardez le code de la transaction reçu par SMS.</p></div>
+  <form class="box" data-form="pay"><h2>2. Confirmez votre paiement</h2><div class="row" style="margin-top:10px"><input type="text" name="nom" placeholder="Votre nom" required aria-label="Votre nom"><input type="text" name="ref" placeholder="Code de la transaction" required aria-label="Code de la transaction"></div><div style="margin-top:10px"><button class="btn">Préparer la confirmation</button></div><p class="small">Votre accès est activé après vérification du paiement.</p></form>
+  ${payLink?`<div class="box"><a class="btn" href="${payLink}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none">Envoyer la confirmation sur WhatsApp</a></div>`:""}`;
+}
+function vReglages(){
+  return `<h1>Réglages</h1><p class="sub">Vos données sont sauvegardées sur votre compte${user?" ("+esc(user.email)+")":""}.</p>
+  <div class="box"><h2>Votre activité</h2><div class="row" style="margin-top:10px"><input type="text" id="me" value="${esc(S.me)}" placeholder="Votre nom ou entreprise (en-tête des documents)" aria-label="Votre nom"></div>
+  <div class="row" style="margin-top:8px"><label class="small">Objectif mensuel</label><input type="number" id="goal" value="${S.goal}" min="0" aria-label="Objectif mensuel" style="max-width:140px;flex:0 1 140px"><label class="small">Devise</label><input type="text" id="cur" value="${esc(S.cur)}" maxlength="6" aria-label="Devise" style="max-width:90px;flex:0 1 90px"></div></div>
+  <div class="box"><h2>Données</h2><div class="row" style="margin-top:8px"><button class="btn alt" id="exp">Exporter (JSON)</button><button class="btn alt" id="out">Se déconnecter</button><button class="btn alt" id="rst" style="color:var(--rd)">Tout effacer</button></div></div>`;
+}
+
+function docText(d){
+  return `${d.type.toUpperCase()} ${d.num}\nDate : ${d.date}\n${S.me?"De : "+S.me+"\n":""}Client : ${cname(d.cid)}\n\n`+d.lines.map(l=>`- ${l.d} : ${l.q} × ${l.p.toFixed(2)} ${S.cur} = ${(l.q*l.p).toFixed(2)} ${S.cur}`).join("\n")+`\n\nTotal : ${total(d).toFixed(2)} ${S.cur}`;
+}
+document.addEventListener("click",e=>{
+  const b=e.target;
+  if(b.id==="exp"){const a=document.createElement("a");a.href="data:application/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(S,null,2));a.download="atelier-freelance.json";a.click();return}
+  if(b.id==="out"){sb.auth.signOut();return}
+  if(b.id==="refresh"){sb.auth.getSession().then(({data})=>{user=null;loadUser(data.session)});return}
+  if(b.id==="cpn"){try{navigator.clipboard.writeText(PAY.num);b.textContent="Numéro copié"}catch(x){b.textContent="Copie impossible"}return}
+  if(b.id==="rst"){if(confirm("Effacer toutes vos données ?")){S=def();save();go("accueil")}return}
+  const t=b.closest("[data-v],[data-del],[data-paid],[data-conv],[data-copy]");if(!t)return;
+  const D=t.dataset;
+  if(D.v)go(D.v);
+  else if(D.del){const[k,id]=D.del.split(":");S[k]=S[k].filter(x=>x.id!==id);save();render()}
+  else if(D.paid){const d=S.docs.find(x=>x.id===D.paid);d.st="payé";d.paid=today();save();render()}
+  else if(D.conv){const d=S.docs.find(x=>x.id===D.conv);const n=S.docs.filter(x=>x.type==="facture").length+1;S.docs.unshift({id:uid(),type:"facture",num:"FA-"+String(n).padStart(3,"0"),cid:d.cid,lines:d.lines,st:"brouillon",date:today()});save();render()}
+  else if(D.copy){const d=S.docs.find(x=>x.id===D.copy);try{navigator.clipboard.writeText(docText(d));t.textContent="Copié"}catch(x){t.textContent="Copie impossible"}}
+});
+document.addEventListener("change",e=>{
+  const c=e.target,D=c.dataset;
+  if(D.chk){S.taches.find(t=>t.id===D.chk).ok=c.checked;save();render()}
+  else if(D.stage){S.clients.find(x=>x.id===D.stage).stage=c.value;save();render()}
+  else if(D.st){const d=S.docs.find(x=>x.id===D.st);d.st=c.value;if(c.value==="payé")d.paid=today();save();render()}
+});
+document.addEventListener("input",e=>{
+  const i=e.target.id;
+  if(i==="me")S.me=e.target.value;
+  else if(i==="goal")S.goal=Math.max(0,parseFloat(e.target.value)||0);
+  else if(i==="cur")S.cur=e.target.value||"€";
+  else return;
+  save();
+});
+document.addEventListener("submit",e=>{
+  const f=e.target.dataset.form;if(!f)return;e.preventDefault();
+  const d=Object.fromEntries(new FormData(e.target));
+  if(f==="auth"){doAuth(d,e.submitter?e.submitter.value:"in");return}
+  if(f==="pay"){payLink="https://wa.me/"+PAY.wa+"?text="+encodeURIComponent("Bonjour, j’ai payé l’abonnement Atelier Freelance ("+PAY.price+"). Nom : "+d.nom.trim()+". E-mail du compte : "+(user?user.email:"")+". Code de transaction : "+d.ref.trim()+".");render();return}
+  if(f==="client")S.clients.unshift({id:uid(),nom:d.nom.trim(),info:d.info.trim(),stage:"Prospect"});
+  if(f==="tache")S.taches.unshift({id:uid(),txt:d.txt.trim(),date:d.date,ok:false});
+  if(f==="doc"){
+    const lines=[0,1,2].map(i=>({d:(d["l"+i]||"").trim(),q:parseFloat(d["q"+i])||0,p:parseFloat(d["p"+i])||0})).filter(l=>l.d);
+    if(!lines.length)return;
+    const n=S.docs.filter(x=>x.type===d.type).length+1;
+    S.docs.unshift({id:uid(),type:d.type,num:(d.type==="devis"?"DV-":"FA-")+String(n).padStart(3,"0"),cid:d.cid,lines,st:"brouillon",date:today()});
+  }
+  save();render();
+});
+render();
+</script>
+</body>
+</html>
