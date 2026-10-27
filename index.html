@@ -193,7 +193,7 @@ input[type=checkbox]{accent-color:var(--ac);width:18px;height:18px}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
 const SB_URL="https://pitjolrfodfbxojkhvre.supabase.co",SB_KEY="sb_publishable_Nw2-Jj_QVqX864Gc5Rlxyw_jEN0RUIG";
-const sb=window.supabase.createClient(SB_URL,SB_KEY);
+const sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:"atelier-session"}});
 const def=()=>({cur:"€",goal:2000,me:"",clients:[],docs:[],taches:[]});
 let S=def(),view="accueil",payLink="",user=null,actif=false,ready=false,msg="",tm=null,authMode="in",lastEmail="";
 function save(){clearTimeout(tm);tm=setTimeout(async()=>{if(!user||!actif)return;try{const{error}=await sb.from("donnees").upsert({user_id:user.id,data:S,updated_at:new Date().toISOString()});if(error)console.error(error)}catch(x){console.error(x)}},600)}
@@ -241,6 +241,7 @@ async function loadUser(session){
   ready=true;render();
 }
 sb.auth.onAuthStateChange((ev,session)=>{if(ev==="INITIAL_SESSION"||ev==="SIGNED_IN"||ev==="SIGNED_OUT")setTimeout(()=>loadUser(session),0)});
+setTimeout(()=>{if(!ready)sb.auth.getSession().then(({data})=>{if(!ready)loadUser(data.session)}).catch(()=>{ready=true;render()})},1500);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const today=()=>new Date().toISOString().slice(0,10);
