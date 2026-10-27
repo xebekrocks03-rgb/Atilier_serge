@@ -57,6 +57,51 @@ input[type=text],input[type=number]{flex:1 1 130px}
 @media (max-width:720px){.app{grid-template-columns:1fr}
 nav{position:static;height:auto;flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--ln);padding:10px}
 .logo{display:none}nav button{white-space:nowrap;gap:8px}}
+.pay{max-width:920px;margin:0 auto;padding:28px clamp(16px,4vw,32px)}
+.pay-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.logo2{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:1.25rem}
+.logo2 i{display:inline-block;width:12px;height:12px;background:var(--am);border-radius:3px;margin-right:8px;transform:rotate(12deg)}
+.pay-hero{text-align:center;margin-bottom:28px}
+.pay-hero .sub{max-width:520px;margin:10px auto 0;overflow-wrap:anywhere}
+.badge{display:inline-block;background:var(--acs);color:var(--gn);font-weight:600;border-radius:99px;padding:4px 14px;margin-bottom:12px}
+.pay-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:16px;align-items:start}
+.plan{background:var(--sf);border:1px solid var(--ln);border-top:6px solid var(--ac);border-radius:12px;padding:22px}
+.price{margin:10px 0 14px}.price b{font:700 2.4rem "Bricolage Grotesque",sans-serif;color:var(--ac)}.price span{color:var(--mut)}
+.feat{list-style:none;margin:0;padding:0}.feat li{padding:7px 0 7px 28px;position:relative;border-top:1px solid var(--ln)}
+.feat li::before{content:"✓";position:absolute;left:4px;color:var(--gn);font-weight:700}
+.st{margin:10px 0 16px;padding-left:20px}.st li{margin-bottom:10px}
+.num{display:inline-block;font:700 1.25rem ui-monospace,monospace;background:var(--acs);color:var(--ac);padding:3px 10px;border-radius:8px;margin:4px 6px 4px 0}
+@media (max-width:720px){.pay-grid{grid-template-columns:1fr}}
+.app.solo main{max-width:none;padding:0}
+.auth{display:grid;grid-template-columns:1.05fr 1fr;min-height:100vh}
+.brand{position:relative;overflow:hidden;background:#14213d;color:#fff;padding:40px clamp(24px,5vw,64px);display:flex;flex-direction:column;justify-content:space-between;gap:32px}
+.brand h1{font-size:clamp(1.9rem,3.6vw,2.8rem);max-width:520px;color:#fff}
+.logo3{font:700 1.3rem "Bricolage Grotesque",sans-serif}
+.logo3 i{display:inline-block;width:12px;height:12px;background:var(--am);border-radius:3px;margin-right:8px;transform:rotate(12deg)}
+.bl{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:14px;max-width:460px}
+.bl li{padding-left:22px;position:relative;color:#c9d3e6}
+.bl li::before{content:"";position:absolute;left:0;top:.6em;width:8px;height:8px;background:var(--am);border-radius:2px;transform:rotate(12deg)}
+.bl b{color:#fff}
+.bsm{color:#9fb0cf;font-size:.92rem;margin:0;position:relative}
+.sh{position:absolute;border-radius:28px;pointer-events:none}
+.s1{width:260px;height:260px;background:var(--am);opacity:.16;right:-90px;top:-70px;transform:rotate(18deg)}
+.s2{width:180px;height:180px;border:3px solid #7c9cff;opacity:.3;right:12%;bottom:-60px;transform:rotate(-14deg)}
+.brand>*:not(.sh){position:relative}
+.fside{display:flex;align-items:center;justify-content:center;padding:32px clamp(16px,4vw,48px)}
+.fcard{width:100%;max-width:420px}
+.fcard h2{font-size:1.7rem;margin-bottom:6px}
+.fcard input{width:100%;padding:12px 14px;font-size:1rem}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border:1px solid var(--ln);border-radius:10px;padding:4px;margin-bottom:26px}
+.tabs button{border:0;background:none;padding:10px;border-radius:7px;font-weight:600;color:var(--mut);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--sf);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.lb{display:block;font-weight:600;margin:18px 0 6px;font-size:.92rem}
+.pwrap{position:relative}.pwrap input{padding-right:92px}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--ac);font-weight:600;cursor:pointer;padding:8px}
+.btn.big{width:100%;margin-top:22px;padding:13px;font-size:1.02rem}
+.msg{margin:14px 0 0;padding:10px 12px;border-left:4px solid var(--am);background:var(--bg);border-radius:6px;font-size:.92rem;overflow-wrap:anywhere}
+.plan{position:relative}
+.ribbon{position:absolute;top:16px;right:16px;background:var(--am);color:#16202b;font-weight:700;font-size:.78rem;padding:3px 10px;border-radius:99px}
+@media (max-width:820px){.auth{grid-template-columns:1fr}.brand{padding:26px 22px;gap:16px}.bl,.bsm{display:none}.brand h1{font-size:1.55rem}}
 .app.solo{grid-template-columns:1fr}.app.solo nav{display:none}
 </style>
 </head>
@@ -67,14 +112,30 @@ nav{position:static;height:auto;flex-direction:row;overflow-x:auto;border-right:
 const SB_URL="https://pitjolrfodfbxojkhvre.supabase.co",SB_KEY="sb_publishable_Nw2-Jj_QVqX864Gc5Rlxyw_jEN0RUIG";
 const sb=window.supabase.createClient(SB_URL,SB_KEY);
 const def=()=>({cur:"€",goal:2000,me:"",clients:[],docs:[],taches:[]});
-let S=def(),view="accueil",payLink="",user=null,actif=false,ready=false,msg="",tm=null;
+let S=def(),view="accueil",payLink="",user=null,actif=false,ready=false,msg="",tm=null,authMode="in",lastEmail="";
 function save(){clearTimeout(tm);tm=setTimeout(async()=>{if(!user||!actif)return;try{const{error}=await sb.from("donnees").upsert({user_id:user.id,data:S,updated_at:new Date().toISOString()});if(error)console.error(error)}catch(x){console.error(x)}},600)}
-function vAuth(){return `<div style="max-width:420px;margin:8vh auto 0"><h1>Atelier Freelance</h1><p class="sub">Connectez-vous ou créez votre compte.</p>
-<form class="box" data-form="auth"><div class="row"><input type="email" name="email" placeholder="E-mail" required autocomplete="email" aria-label="E-mail" style="flex:1 1 100%"><input type="password" name="pw" placeholder="Mot de passe (8 caractères minimum)" required minlength="8" autocomplete="current-password" aria-label="Mot de passe" style="flex:1 1 100%"></div>
-<div class="row" style="margin-top:12px"><button class="btn" name="mode" value="in">Se connecter</button><button class="btn alt" name="mode" value="up">Créer un compte</button></div>${msg?`<p class="small" role="status">${esc(msg)}</p>`:""}</form></div>`}
-function vLock(){return vAbo()+'<div class="box"><p class="small">Après votre paiement, votre accès est activé manuellement. Appuyez ensuite sur « Actualiser mon accès ».</p><div class="row"><button class="btn alt" id="refresh">Actualiser mon accès</button><button class="btn ghost" id="out">Se déconnecter</button></div></div>'}
+function vAuth(){const up=authMode==="up";
+return `<div class="auth">
+<aside class="brand"><span class="logo3"><i></i>Atelier Freelance</span>
+<div><h1>Votre activité de freelance, enfin bien rangée.</h1>
+<ul class="bl"><li><b>Clients</b> suivis de la prospection à la fin de mission</li><li><b>Devis &amp; factures</b> créés en quelques minutes</li><li><b>Revenus</b> visibles d’un coup d’œil</li></ul></div>
+<p class="bsm">À partir de ${PAY.price} par mois · paiement par mobile money</p><span class="sh s1"></span><span class="sh s2"></span></aside>
+<section class="fside"><div class="fcard">
+<div class="tabs" role="tablist"><button type="button" role="tab" aria-selected="${!up}" data-mode="in">Connexion</button><button type="button" role="tab" aria-selected="${up}" data-mode="up">Créer un compte</button></div>
+<h2>${up?"Créez votre compte":"Content de vous revoir"}</h2>
+<p class="small">${up?"Un e-mail et un mot de passe suffisent. Vous activerez ensuite votre abonnement.":"Connectez-vous pour retrouver vos clients et vos factures."}</p>
+<form data-form="auth"><label class="lb" for="em">Adresse e-mail</label><input id="em" type="email" name="email" required autocomplete="email" value="${esc(lastEmail)}" placeholder="vous@exemple.com">
+<label class="lb" for="pw">Mot de passe</label><div class="pwrap"><input id="pw" type="password" name="pw" required minlength="8" autocomplete="${up?"new-password":"current-password"}" placeholder="8 caractères minimum"><button type="button" class="eye" id="eye">Afficher</button></div>
+<button class="btn big">${up?"Créer mon compte":"Se connecter"}</button>
+${msg?`<p class="msg" role="status">${esc(msg)}</p>`:""}</form>
+</div></section></div>`}
+function vLock(){
+  return `<div class="pay">
+  <div class="pay-top"><span class="logo2"><i></i>Atelier Freelance</span><button class="btn ghost" id="out">Se déconnecter</button></div>
+  <div class="pay-hero"><span class="badge">Compte créé ✓</span><h1>Dernière étape : activez votre accès</h1><p class="sub">Bienvenue ${esc(user.email)}. Un abonnement mensuel vous donne accès à tout l’outil.</p></div>
+  ${payBody(true)}</div>`}
 async function doAuth(d,mode){
-  msg="Un instant…";render();
+  lastEmail=d.email;msg="Un instant…";render();
   try{
     if(mode==="up"){const{data,error}=await sb.auth.signUp({email:d.email.trim(),password:d.pw});
       if(error)msg="Inscription impossible : "+error.message;
@@ -89,6 +150,7 @@ async function loadUser(session){
   if(user){
     try{
       const a=await sb.from("abonnes").select("actif").eq("user_id",user.id).maybeSingle();
+      if(!a.error&&!a.data){try{await sb.from("abonnes").insert({user_id:user.id,email:user.email,actif:false})}catch(x){}}
       actif=!!(a.data&&a.data.actif);
       if(actif){const r=await sb.from("donnees").select("data").eq("user_id",user.id).maybeSingle();S=Object.assign(def(),(r.data&&r.data.data)||{})}
     }catch(x){console.error(x)}
@@ -157,12 +219,21 @@ function vTaches(){
 }
 
 const PAY={num:"+228 91 29 43 45",wa:"22891294345",price:"2 000 FCFA"};
-function vAbo(){
-  return `<h1>S’abonner</h1><p class="sub">Accès complet à Atelier Freelance, ${PAY.price} par mois.</p>
-  <div class="box"><h2>1. Envoyez le paiement</h2><p>Transférez <b>${PAY.price}</b> par mobile money au numéro :</p><p style="font:700 1.6rem 'Bricolage Grotesque',sans-serif;margin:8px 0">${PAY.num}</p><button class="btn alt" id="cpn">Copier le numéro</button><p class="small">Gardez le code de la transaction reçu par SMS.</p></div>
-  <form class="box" data-form="pay"><h2>2. Confirmez votre paiement</h2><div class="row" style="margin-top:10px"><input type="text" name="nom" placeholder="Votre nom" required aria-label="Votre nom"><input type="text" name="ref" placeholder="Code de la transaction" required aria-label="Code de la transaction"></div><div style="margin-top:10px"><button class="btn">Préparer la confirmation</button></div><p class="small">Votre accès est activé après vérification du paiement.</p></form>
-  ${payLink?`<div class="box"><a class="btn" href="${payLink}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none">Envoyer la confirmation sur WhatsApp</a></div>`:""}`;
-}
+function payBody(lock){
+  return `<div class="pay-grid">
+    <div class="plan"><span class="ribbon">Tout inclus</span><h2>Atelier Freelance</h2><div class="price"><b>${PAY.price}</b><span> / mois</span></div>
+      <ul class="feat"><li>Suivi de vos clients et prospects</li><li>Devis et factures numérotés automatiquement</li><li>Liste de tâches</li><li>Tableau de bord de vos revenus</li><li>Données sauvegardées sur votre compte</li></ul>
+      <p class="small" style="margin:14px 0 0">Paiement par mobile money · activation après vérification</p></div>
+    <div class="box steps"><h2>Comment payer</h2>
+      <ol class="st"><li><b>Envoyez ${PAY.price}</b> par mobile money au numéro<br><span class="num">${PAY.num}</span> <button class="btn alt sm" id="cpn">Copier</button></li>
+      <li><b>Gardez le code</b> de la transaction reçu par SMS.</li>
+      <li><b>Confirmez</b> ci-dessous : votre paiement est vérifié, puis votre compte est activé.</li></ol>
+      <form data-form="pay"><div class="row"><input type="text" name="nom" placeholder="Votre nom" required aria-label="Votre nom"><input type="text" name="ref" placeholder="Code de la transaction" required aria-label="Code de la transaction"></div>
+      <div style="margin-top:10px"><button class="btn">Confirmer mon paiement</button></div></form>
+      ${payLink?`<div style="margin-top:12px"><a class="btn" href="${payLink}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none">Envoyer la confirmation sur WhatsApp</a></div>`:""}
+      ${lock?`<p class="small" style="margin-top:14px">⏳ En attente de paiement. Une fois votre compte activé, appuyez sur le bouton ci-dessous.</p><button class="btn alt" id="refresh">Actualiser mon accès</button>`:""}
+    </div></div>`}
+function vAbo(){return `<h1>S’abonner</h1><p class="sub">Accès complet à Atelier Freelance, ${PAY.price} par mois.</p>`+payBody(false)}
 function vReglages(){
   return `<h1>Réglages</h1><p class="sub">Vos données sont sauvegardées sur votre compte${user?" ("+esc(user.email)+")":""}.</p>
   <div class="box"><h2>Votre activité</h2><div class="row" style="margin-top:10px"><input type="text" id="me" value="${esc(S.me)}" placeholder="Votre nom ou entreprise (en-tête des documents)" aria-label="Votre nom"></div>
@@ -176,13 +247,15 @@ function docText(d){
 document.addEventListener("click",e=>{
   const b=e.target;
   if(b.id==="exp"){const a=document.createElement("a");a.href="data:application/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(S,null,2));a.download="atelier-freelance.json";a.click();return}
+  if(b.id==="eye"){const i=document.getElementById("pw");i.type=i.type==="password"?"text":"password";b.textContent=i.type==="password"?"Afficher":"Masquer";return}
   if(b.id==="out"){sb.auth.signOut();return}
   if(b.id==="refresh"){sb.auth.getSession().then(({data})=>{user=null;loadUser(data.session)});return}
   if(b.id==="cpn"){try{navigator.clipboard.writeText(PAY.num);b.textContent="Numéro copié"}catch(x){b.textContent="Copie impossible"}return}
   if(b.id==="rst"){if(confirm("Effacer toutes vos données ?")){S=def();save();go("accueil")}return}
-  const t=b.closest("[data-v],[data-del],[data-paid],[data-conv],[data-copy]");if(!t)return;
+  const t=b.closest("[data-v],[data-del],[data-paid],[data-conv],[data-copy],[data-mode]");if(!t)return;
   const D=t.dataset;
   if(D.v)go(D.v);
+  else if(D.mode){authMode=D.mode;msg="";render()}
   else if(D.del){const[k,id]=D.del.split(":");S[k]=S[k].filter(x=>x.id!==id);save();render()}
   else if(D.paid){const d=S.docs.find(x=>x.id===D.paid);d.st="payé";d.paid=today();save();render()}
   else if(D.conv){const d=S.docs.find(x=>x.id===D.conv);const n=S.docs.filter(x=>x.type==="facture").length+1;S.docs.unshift({id:uid(),type:"facture",num:"FA-"+String(n).padStart(3,"0"),cid:d.cid,lines:d.lines,st:"brouillon",date:today()});save();render()}
@@ -205,7 +278,7 @@ document.addEventListener("input",e=>{
 document.addEventListener("submit",e=>{
   const f=e.target.dataset.form;if(!f)return;e.preventDefault();
   const d=Object.fromEntries(new FormData(e.target));
-  if(f==="auth"){doAuth(d,e.submitter?e.submitter.value:"in");return}
+  if(f==="auth"){doAuth(d,authMode);return}
   if(f==="pay"){payLink="https://wa.me/"+PAY.wa+"?text="+encodeURIComponent("Bonjour, j’ai payé l’abonnement Atelier Freelance ("+PAY.price+"). Nom : "+d.nom.trim()+". E-mail du compte : "+(user?user.email:"")+". Code de transaction : "+d.ref.trim()+".");render();return}
   if(f==="client")S.clients.unshift({id:uid(),nom:d.nom.trim(),info:d.info.trim(),stage:"Prospect"});
   if(f==="tache")S.taches.unshift({id:uid(),txt:d.txt.trim(),date:d.date,ok:false});
