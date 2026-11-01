@@ -194,9 +194,10 @@ input[type=checkbox]{accent-color:var(--ac);width:18px;height:18px}
 <script>
 const SB_URL="https://pitjolrfodfbxojkhvre.supabase.co",SB_KEY="sb_publishable_Nw2-Jj_QVqX864Gc5Rlxyw_jEN0RUIG";
 const sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:"atelier-session"}});
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(x){}
 const def=()=>({cur:"€",goal:2000,me:"",clients:[],docs:[],taches:[]});
-let S=def(),view="accueil",payLink="",user=null,actif=false,ready=false,msg="",tm=null,authMode="in",lastEmail="";
-function save(){clearTimeout(tm);tm=setTimeout(async()=>{if(!user||!actif)return;try{const{error}=await sb.from("donnees").upsert({user_id:user.id,data:S,updated_at:new Date().toISOString()});if(error)console.error(error)}catch(x){console.error(x)}},600)}
+let S=def(),view="accueil",payLink="",user=null,actif=false,dataOk=false,ready=false,msg="",tm=null,authMode="in",lastEmail="";
+function save(){clearTimeout(tm);tm=setTimeout(async()=>{if(!user||!actif||!dataOk)return;try{const{error}=await sb.from("donnees").upsert({user_id:user.id,data:S,updated_at:new Date().toISOString()});if(error)console.error(error)}catch(x){console.error(x)}},600)}
 function vAuth(){const up=authMode==="up";
 return `<div class="auth">
 <aside class="brand"><div class="bphoto"></div><span class="logo3"><i></i>Atelier Freelance</span>
@@ -229,13 +230,15 @@ async function doAuth(d,mode){
 }
 async function loadUser(session){
   if(session&&user&&session.user.id===user.id&&actif)return;
-  user=session?session.user:null;actif=false;S=def();
+  user=session?session.user:null;actif=false;dataOk=false;S=def();
   if(user){
     try{
-      const a=await sb.from("abonnes").select("actif").eq("user_id",user.id).maybeSingle();
+      let a=await sb.from("abonnes").select("actif").eq("user_id",user.id).maybeSingle();
+      if(a.error){await new Promise(r=>setTimeout(r,1200));a=await sb.from("abonnes").select("actif").eq("user_id",user.id).maybeSingle()}
       if(!a.error&&!a.data){try{await sb.from("abonnes").insert({user_id:user.id,email:user.email,actif:false})}catch(x){}}
       actif=!!(a.data&&a.data.actif);
-      if(actif){const r=await sb.from("donnees").select("data").eq("user_id",user.id).maybeSingle();S=Object.assign(def(),(r.data&&r.data.data)||{})}
+      if(a.error){try{actif=localStorage.getItem("atelier-actif-"+user.id)==="1"}catch(x){}}else{try{localStorage.setItem("atelier-actif-"+user.id,actif?"1":"0")}catch(x){}}
+      if(actif){const r=await sb.from("donnees").select("data").eq("user_id",user.id).maybeSingle();if(!r.error){S=Object.assign(def(),(r.data&&r.data.data)||{});dataOk=true}}
     }catch(x){console.error(x)}
   }
   ready=true;render();
