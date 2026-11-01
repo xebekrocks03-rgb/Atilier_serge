@@ -274,6 +274,59 @@ main{padding-top:14px}
 }
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){:root{--gl:rgba(255,255,255,.88);--gl2:rgba(255,255,255,.9)}}
 @media (prefers-reduced-transparency:reduce){:root{--bf:none}.box,.stat,.col,.plan,.fcard,nav{background:var(--sf)}}
+
+/* ===== Facture premium ===== */
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+a.btn{text-decoration:none;display:inline-flex;align-items:center}
+.sheet{position:relative;max-width:820px;margin:0 auto 30px;background:#fff;color:#14213d;border-radius:22px;overflow:hidden;box-shadow:0 26px 70px rgba(20,33,61,.24);font-size:.95rem;line-height:1.45}
+.sh-bar{height:10px;background:linear-gradient(90deg,#14213d,#2f5bea 70%,#f5b335)}
+.sh-in{padding:clamp(22px,5vw,46px)}
+.sh-head{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-start}
+.sh-brand{display:flex;gap:14px;align-items:center;min-width:0}
+.sh-logo{max-height:64px;max-width:150px;object-fit:contain}
+.sh-name{font:700 1.4rem "Bricolage Grotesque",Figtree,sans-serif;letter-spacing:-.01em;overflow-wrap:anywhere}
+.sh-title{text-align:right}
+.sheet .sh-title h2{font:800 2rem "Bricolage Grotesque",Figtree,sans-serif;letter-spacing:.14em;color:#2f5bea;margin:0}
+.sh-no{font-weight:700;margin-top:4px}
+.sh-dates{display:grid;grid-template-columns:auto auto;gap:2px 14px;justify-content:end;margin-top:8px;font-size:.88rem}
+.sh-dates span,.sh-m{color:#6b7a90}
+.sh-parties{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:30px 0 24px}
+.sh-card{background:#f4f7fc;border:1px solid #e6ebf3;border-radius:14px;padding:14px 16px;overflow-wrap:anywhere}
+.sh-card small{display:block;text-transform:uppercase;letter-spacing:.12em;font-size:.7rem;font-weight:700;color:#2f5bea;margin-bottom:6px}
+.sh-t{width:100%;border-collapse:separate;border-spacing:0;font-size:.93rem}
+.sh-t th{background:#14213d;color:#fff;text-align:left;padding:11px 14px;font-size:.74rem;letter-spacing:.09em;text-transform:uppercase}
+.sh-t th:first-child{border-radius:10px 0 0 10px}.sh-t th:last-child{border-radius:0 10px 10px 0}
+.sh-t td{padding:12px 14px;border-bottom:1px solid #e6ebf3;vertical-align:top;overflow-wrap:anywhere}
+.sh-t tbody tr:nth-child(even) td{background:#fafbfe}
+.sh-t .r{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.sh-sum{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:18px;flex-wrap:wrap}
+.sh-tot{width:min(100%,340px);margin-left:auto}
+.sh-tot div{display:flex;justify-content:space-between;gap:12px;padding:6px 4px;color:#46556b}
+.sh-tot .g{margin-top:8px;background:linear-gradient(135deg,#14213d,#23408e);color:#fff;border-radius:14px;padding:14px 16px;font-weight:700;font-size:1.1rem;align-items:center}
+.sh-tot .g span:first-child{color:#f5b335;font-size:.76rem;letter-spacing:.12em}
+.sh-words{margin:18px 0 0;padding:12px 14px;border-left:4px solid #f5b335;background:#fff8e8;border-radius:0 10px 10px 0;font-size:.9rem}
+.sh-info{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+.sh-foot{margin-top:30px;padding-top:16px;border-top:1px solid #e6ebf3;text-align:center;color:#6b7a90;font-size:.82rem}
+.sh-foot b{display:block;color:#14213d;font-size:.95rem;margin-bottom:4px}
+.stamp{transform:rotate(-8deg);border:4px solid #1f9d6e;color:#1f9d6e;font:800 1.6rem Figtree,sans-serif;letter-spacing:.14em;padding:6px 18px;border-radius:12px;opacity:.85;text-align:center;margin-left:6px}
+.stamp small{display:block;font-size:.62rem;letter-spacing:.08em;font-weight:700}
+.sh-sub{display:none;color:#6b7a90;font-size:.8rem;margin-top:2px}
+main{min-width:0}
+.sheet{max-width:100%}
+.sh-t tr,.sh-tot,.sh-info,.sh-foot,.sh-parties{break-inside:avoid}
+@media (max-width:620px){.sh-title{text-align:left}.sh-dates{justify-content:start}.sh-parties,.sh-info{grid-template-columns:1fr}.hm{display:none}.sh-sub{display:block}.sh-sum{flex-direction:column;align-items:stretch}.stamp{align-self:flex-start}.sh-t th,.sh-t td{padding:9px 8px;font-size:.85rem}}
+@page{size:A4;margin:12mm}
+@media print{
+html,body{background:#fff!important}
+body::before{display:none!important}
+nav,.noprint{display:none!important}
+.app{display:block!important}
+main{padding:0!important;max-width:none!important}
+.app{min-height:0!important}
+.sheet{box-shadow:none!important;border-radius:0!important;max-width:none!important;margin:0!important;font-size:.88rem}
+.sh-in{padding:16px 6px!important}.sh-parties{margin:20px 0 16px!important}.sh-foot{margin-top:20px!important}.sh-info{margin-top:16px!important}.sh-t td{padding:9px 12px!important}
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
 </style>
 </head>
 <body>
@@ -283,8 +336,8 @@ main{padding-top:14px}
 const SB_URL="https://pitjolrfodfbxojkhvre.supabase.co",SB_KEY="sb_publishable_Nw2-Jj_QVqX864Gc5Rlxyw_jEN0RUIG";
 const sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:"atelier-session"}});
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(x){}
-const def=()=>({cur:"€",goal:2000,me:"",clients:[],docs:[],taches:[]});
-let S=def(),view="accueil",payLink="",user=null,actif=false,dataOk=false,ready=false,msg="",tm=null,authMode="in",lastEmail="";
+const def=()=>({cur:"€",goal:2000,me:"",tel:"",mail:"",adr:"",nif:"",tva:0,pay:"",cond:"",logo:"",clients:[],docs:[],taches:[]});
+let S=def(),view="accueil",openDoc="",payLink="",user=null,actif=false,dataOk=false,ready=false,msg="",tm=null,authMode="in",lastEmail="";
 function save(){clearTimeout(tm);tm=setTimeout(async()=>{if(!user||!actif||!dataOk)return;try{const{error}=await sb.from("donnees").upsert({user_id:user.id,data:S,updated_at:new Date().toISOString()});if(error)console.error(error)}catch(x){console.error(x)}},600)}
 function vAuth(){const up=authMode==="up";
 return `<div class="auth">
@@ -349,7 +402,7 @@ const ini=n=>esc(((n||"?").trim()[0]||"?").toUpperCase());
 function nav(){
   const n={clients:S.clients.length,docs:S.docs.length,taches:S.taches.filter(t=>!t.ok).length};
   const em=user?user.email:"";
-  document.getElementById("nav").innerHTML='<div class="logo"><i></i>Atelier</div>'+SECT.map(([k,l])=>`<button data-v="${k}" ${view===k?'aria-current="page"':""}><span class="ni">${ic(k)}</span><span class="nl">${l}</span>${n[k]?`<span class="cnt">${n[k]}</span>`:""}</button>`).join("")+`<div class="who"><span class="av">${ini(em)}</span><div><b>${esc(em)}</b><span>Abonnement actif</span></div></div>`;
+  document.getElementById("nav").innerHTML='<div class="logo"><i></i>Atelier</div>'+SECT.map(([k,l])=>`<button data-v="${k}" ${(view===k||(k==="docs"&&view==="apercu"))?'aria-current="page"':""}><span class="ni">${ic(k)}</span><span class="nl">${l}</span>${n[k]?`<span class="cnt">${n[k]}</span>`:""}</button>`).join("")+`<div class="who"><span class="av">${ini(em)}</span><div><b>${esc(em)}</b><span>Abonnement actif</span></div></div>`;
 }
 function go(v){view=v;render();window.scrollTo(0,0)}
 function render(){
@@ -357,7 +410,7 @@ function render(){
   const gate=!ready?'<p class="empty">Chargement…</p>':!user?vAuth():!actif?vLock():null;
   app.classList.toggle("solo",gate!==null);
   if(gate!==null){mn.innerHTML=gate;return}
-  nav();mn.innerHTML=({accueil:vAccueil,clients:vClients,docs:vDocs,taches:vTaches,abo:vAbo,reglages:vReglages})[view]()}
+  nav();mn.innerHTML=({accueil:vAccueil,clients:vClients,docs:vDocs,apercu:vApercu,taches:vTaches,abo:vAbo,reglages:vReglages})[view]()}
 
 function vAccueil(){
   const m=today().slice(0,7),fa=S.docs.filter(d=>d.type==="facture");
@@ -371,7 +424,7 @@ function vAccueil(){
   <section class="hero"><span class="eyebrow">Objectif du mois</span><div class="big">${money(rev)}</div><span class="hs">encaissés sur un objectif de ${money(S.goal)}</span>
   <div class="bar" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pct}%"></i></div><div class="hrow"><b>${pct} %</b><span>Reste ${money(Math.max(0,S.goal-rev))}</span></div></section>
   <div class="stats"><div class="stat s-gn"><b>${money(rev)}</b>encaissé ce mois-ci</div><div class="stat s-am"><b>${money(att)}</b>en attente de paiement</div><div class="stat s-ac"><b>${act}</b>mission${act>1?"s":""} en cours</div></div>
-  <div class="two"><div class="box"><h2>Factures à relancer</h2>${due.length?due.map(d=>`<div class="item"><span class="t"><b>${esc(d.num)}</b> · ${esc(cname(d.cid))}</span><b>${money(total(d))}</b><button class="btn sm" data-paid="${d.id}">Marquer payée</button></div>`).join(""):'<div class="empty">Aucune facture en attente. Créez-en une dans « Devis &amp; factures ».</div>'}</div>
+  <div class="two"><div class="box"><h2>Factures à relancer</h2>${due.length?due.map(d=>`<div class="item"><span class="t"><b>${esc(d.num)}</b> · ${esc(cname(d.cid))}</span><b>${money(ttc(d))}</b><button class="btn sm" data-paid="${d.id}">Marquer payée</button></div>`).join(""):'<div class="empty">Aucune facture en attente. Créez-en une dans « Devis &amp; factures ».</div>'}</div>
   <div class="box"><h2>Tâches à venir</h2>${tk.length?tk.map(t=>`<div class="item"><span class="t">${esc(t.txt)}</span>${t.date?`<span class="small ${t.date<today()?"late":""}">${esc(t.date)}</span>`:""}</div>`).join(""):'<div class="empty">Aucune tâche en cours.</div>'}</div></div>`;
 }
 
@@ -381,17 +434,52 @@ function vClients(){
   ${S.clients.length?`<div class="cols">${STAGES.map((st,i)=>{const l=S.clients.filter(c=>c.stage===st);return `<div class="col c${i}"><h2><span>${st}</span><em>${l.length}</em></h2>${l.map(c=>`<div class="card"><div class="cl"><span class="av">${ini(c.nom)}</span><div><b>${esc(c.nom)}</b><br><span class="small">${esc(c.info)}</span></div></div><div class="row" style="margin-top:10px"><select data-stage="${c.id}" aria-label="Étape">${STAGES.map(x=>`<option ${x===st?"selected":""}>${x}</option>`).join("")}</select><button class="btn ghost" data-del="clients:${c.id}" aria-label="Supprimer">✕</button></div></div>`).join("")}</div>`}).join("")}</div>`:'<div class="empty">Aucun client pour l’instant. Ajoutez votre premier prospect.</div>'}`;
 }
 
+const U=["zéro","un","deux","trois","quatre","cinq","six","sept","huit","neuf","dix","onze","douze","treize","quatorze","quinze","seize","dix-sept","dix-huit","dix-neuf"],TN=["","","vingt","trente","quarante","cinquante","soixante"];
+function w100(n,f){if(n<20)return U[n];if(n<70){const t=Math.floor(n/10),u=n%10;return TN[t]+(u===0?"":u===1?" et un":"-"+U[u])}if(n<80)return n===71?"soixante et onze":"soixante-"+U[n-60];if(n===80)return f?"quatre-vingts":"quatre-vingt";return "quatre-vingt-"+U[n-80]}
+function w1000(n,f){const h=Math.floor(n/100),r=n%100;let s="";if(h>0)s=h===1?"cent":U[h]+" cent"+(r===0&&f&&h>1?"s":"");if(r>0)s+=(s?" ":"")+w100(r,f);return s}
+function nbW(n){if(n===0)return "zéro";const b=Math.floor(n/1e9),m=Math.floor(n%1e9/1e6),k=Math.floor(n%1e6/1e3),r=n%1e3,p=[];if(b)p.push(b===1?"un milliard":w1000(b,false)+" milliards");if(m)p.push(m===1?"un million":w1000(m,false)+" millions");if(k)p.push(k===1?"mille":w1000(k,false)+" mille");if(r)p.push(w1000(r,true));return p.join(" ")}
+function curW(n){const c=(S.cur||"").trim();if(/^(f\s?cfa|fcfa|xof|cfa|f)$/i.test(c))return n>=2?"francs CFA":"franc CFA";if(/^(€|eur|euros?)$/i.test(c))return n>=2?"euros":"euro";if(/^(\$|usd)$/i.test(c))return n>=2?"dollars":"dollar";return c}
+function inWords(v){const x=Math.round(v*100)/100,e=Math.floor(x),ct=Math.round((x-e)*100);let s=nbW(e)+(e>=1e6&&e%1e6===0?" de":"")+" "+curW(e);if(ct>0)s+=" et "+nbW(ct)+" centime"+(ct>1?"s":"");return s.charAt(0).toUpperCase()+s.slice(1)}
+function addDays(iso,n){const x=new Date(iso+"T12:00:00");x.setDate(x.getDate()+n);return x.toISOString().slice(0,10)}
+function nextNum(type){const p=type==="devis"?"DV-":"FA-";const mx=S.docs.filter(x=>x.type===type).reduce((a,x)=>Math.max(a,parseInt((String(x.num).match(/(\d+)\s*$/)||[0,0])[1],10)||0),0);return p+String(mx+1).padStart(3,"0")}
+const ttc=d=>total(d)*(1+(d.tva||0)/100);
+const fdate=iso=>iso?new Date(iso+"T12:00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"}):"";
+function readLogo(f){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,280/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*k));c.height=Math.max(1,Math.round(im.height*k));c.getContext("2d").drawImage(im,0,0,c.width,c.height);S.logo=c.toDataURL("image/png");save();render()};im.src=r.result};r.readAsDataURL(f)}
+function vApercu(){
+  const d=S.docs.find(x=>x.id===openDoc);if(!d){view="docs";return vDocs()}
+  const c=S.clients.find(x=>x.id===d.cid)||{nom:"Client supprimé",info:""};
+  const F=d.type==="facture",ht=total(d),tv=d.tva||0,tx=ht*tv/100,tt=ht+tx;
+  const fm=n=>{const r=Math.round(n*100)/100;return r.toLocaleString("fr-FR",{minimumFractionDigits:Number.isInteger(r)?0:2,maximumFractionDigits:2})+" "+esc(S.cur)};
+  const br=t=>esc(t).replace(/\n/g,"<br>");
+  const rows=d.lines.map(l=>`<tr><td>${esc(l.d)}<span class="sh-sub">${l.q} × ${fm(l.p)}</span></td><td class="r hm">${l.q}</td><td class="r hm">${fm(l.p)}</td><td class="r"><b>${fm(l.q*l.p)}</b></td></tr>`).join("");
+  const notes=[d.note,S.cond].filter(Boolean);
+  const dueTxt=d.due?(d.due===d.date?"À réception":fdate(d.due)):"";
+  const em=[S.adr,S.tel,S.mail,S.nif].filter(Boolean).map(esc).join("<br>");
+  return `<div class="noprint tools"><button class="btn alt" data-v="docs">← Retour</button><button class="btn" id="prn">Imprimer / Enregistrer en PDF</button><a class="btn alt" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(docText(d))}">Envoyer par WhatsApp</a><button class="btn alt" data-copy="${d.id}">Copier le texte</button></div>
+  <p class="small noprint" style="margin:0 0 14px">Astuce : dans la fenêtre d’impression, choisissez « Enregistrer au format PDF » pour obtenir un fichier à envoyer à votre client.</p>
+  ${S.me?"":'<div class="box noprint">Ajoutez le nom et les coordonnées de votre activité dans <b>Réglages</b> pour les voir sur vos documents.</div>'}
+  <article class="sheet"><div class="sh-bar"></div><div class="sh-in">
+  <div class="sh-head"><div class="sh-brand">${S.logo?`<img class="sh-logo" src="${S.logo}" alt="">`:""}<div class="sh-name">${esc(S.me||"Votre activité")}</div></div>
+  <div class="sh-title"><h2>${F?"FACTURE":"DEVIS"}</h2><div class="sh-no">N° ${esc(d.num)}</div><div class="sh-dates"><span>Date</span><b>${fdate(d.date)}</b>${dueTxt?`<span>${F?"Échéance":"Valable jusqu’au"}</span><b>${dueTxt}</b>`:""}${d.ref?`<span>Réf. devis</span><b>${esc(d.ref)}</b>`:""}</div></div></div>
+  <div class="sh-parties"><div class="sh-card"><small>Émetteur</small><b>${esc(S.me||"—")}</b>${em?`<br><span class="sh-m">${em}</span>`:""}</div><div class="sh-card"><small>${F?"Facturé à":"Destinataire"}</small><b>${esc(c.nom)}</b>${c.info?`<br><span class="sh-m">${esc(c.info)}</span>`:""}</div></div>
+  <table class="sh-t"><thead><tr><th>Désignation</th><th class="r hm">Qté</th><th class="r hm">Prix unitaire</th><th class="r">Montant</th></tr></thead><tbody>${rows}</tbody></table>
+  <div class="sh-sum">${F&&d.st==="payé"?`<div class="stamp">PAYÉE<small>${d.paid?"le "+fdate(d.paid):""}</small></div>`:"<span></span>"}<div class="sh-tot">${tv?`<div><span>Sous-total HT</span><span>${fm(ht)}</span></div><div><span>TVA (${tv} %)</span><span>${fm(tx)}</span></div>`:""}<div class="g"><span>${tv?"TOTAL TTC":"TOTAL À PAYER"}</span><span>${fm(tt)}</span></div></div></div>
+  ${tt>0&&tt<1e12?`<p class="sh-words">Arrêté ${F?"la présente facture":"le présent devis"} à la somme de : <b>${esc(inWords(tt))}</b>.</p>`:""}
+  ${S.pay||notes.length?`<div class="sh-info">${S.pay?`<div class="sh-card"><small>Modalités de paiement</small>${br(S.pay)}</div>`:""}${notes.length?`<div class="sh-card"><small>Notes et conditions</small>${notes.map(t=>br(t)).join("<br>")}</div>`:""}</div>`:""}
+  <div class="sh-foot"><b>Merci pour votre confiance.</b>${esc(S.me||"")}</div></div></article>`;
+}
 function vDocs(){
   const ro=S.clients.length?"":"disabled";
-  return `<h1>Devis & factures</h1><p class="sub">Créez un document, suivez son statut, copiez-le pour l’envoyer.</p>
+  return `<h1>Devis & factures</h1><p class="sub">Créez un document, ouvrez-le en version professionnelle (PDF) et suivez son statut.</p>
   ${S.clients.length?"":'<div class="box">Ajoutez d’abord un client dans la section « Clients ».</div>'}
   <form class="box" data-form="doc"><div class="row" style="margin-bottom:10px"><select name="type" aria-label="Type"><option value="devis">Devis</option><option value="facture">Facture</option></select>
   <select name="cid" aria-label="Client" required>${S.clients.map(c=>`<option value="${c.id}">${esc(c.nom)}</option>`).join("")}</select></div>
-  <div class="lines">${[0,1,2].map(i=>`<input type="text" name="l${i}" placeholder="Prestation ${i+1}" aria-label="Prestation ${i+1}" ${i?"":"required"}><input type="number" name="q${i}" placeholder="Qté" min="0" step="any" value="1" aria-label="Quantité"><input type="number" name="p${i}" placeholder="Prix" min="0" step="0.01" aria-label="Prix unitaire">`).join("")}</div>
+  <div class="lines">${[0,1,2,3,4].map(i=>`<input type="text" name="l${i}" placeholder="Prestation ${i+1}" aria-label="Prestation ${i+1}" ${i?"":"required"}><input type="number" name="q${i}" placeholder="Qté" min="0" step="any" value="1" aria-label="Quantité"><input type="number" name="p${i}" placeholder="Prix" min="0" step="0.01" aria-label="Prix unitaire">`).join("")}</div>
+  <div class="row" style="margin-top:10px"><select name="dl" aria-label="Échéance"><option value="0">Échéance : à réception</option><option value="7">Échéance : 7 jours</option><option value="15" selected>Échéance : 15 jours</option><option value="30">Échéance : 30 jours</option></select><input type="text" name="note" placeholder="Note pour ce document (optionnel)" aria-label="Note"></div>
   <div style="margin-top:12px"><button class="btn" ${ro}>Créer le document</button></div></form>
-  <div class="box">${S.docs.length?S.docs.map(d=>`<div class="item"><span class="chip ${d.type}">${d.type}</span><span class="t"><b>${esc(d.num)}</b> · ${esc(cname(d.cid))}<br><span class="small">${esc(d.date)} · ${d.lines.map(l=>esc(l.d)).join(", ")}</span></span><b>${money(total(d))}</b>
+  <div class="box">${S.docs.length?S.docs.map(d=>`<div class="item"><span class="chip ${d.type}">${d.type}</span><span class="t"><b>${esc(d.num)}</b> · ${esc(cname(d.cid))}<br><span class="small">${esc(d.date)} · ${d.lines.map(l=>esc(l.d)).join(", ")}</span></span><b>${money(ttc(d))}</b>
   <select class="stt s-${d.st==="payé"?"p":d.st==="envoyé"?"e":"b"}" data-st="${d.id}" aria-label="Statut">${STAT.map(s=>`<option ${s===d.st?"selected":""}>${s}</option>`).join("")}</select>
-  ${d.type==="devis"?`<button class="btn alt sm" data-conv="${d.id}">En facture</button>`:""}<button class="btn alt sm" data-copy="${d.id}">Copier</button><button class="btn ghost" data-del="docs:${d.id}" aria-label="Supprimer">✕</button></div>`).join(""):'<div class="empty">Aucun document. Créez votre premier devis ci-dessus.</div>'}</div>`;
+  ${d.type==="devis"?`<button class="btn alt sm" data-conv="${d.id}">En facture</button>`:""}<button class="btn sm" data-open="${d.id}">Aperçu / PDF</button><button class="btn alt sm" data-copy="${d.id}">Copier</button><button class="btn ghost" data-del="docs:${d.id}" aria-label="Supprimer">✕</button></div>`).join(""):'<div class="empty">Aucun document. Créez votre premier devis ci-dessus.</div>'}</div>`;
 }
 
 function vTaches(){
@@ -420,12 +508,19 @@ function vReglages(){
   return `<h1>Réglages</h1><p class="sub">Vos données sont sauvegardées sur votre compte${user?" ("+esc(user.email)+")":""}.</p>
   <div class="box acct"><span class="av lg">${ini(user?user.email:"")}</span><div><b>${esc(user?user.email:"")}</b><br><span class="tag ok">Abonnement actif</span></div></div>
   <div class="box"><h2>Votre activité</h2><div class="row" style="margin-top:10px"><input type="text" id="me" value="${esc(S.me)}" placeholder="Votre nom ou entreprise (en-tête des documents)" aria-label="Votre nom"></div>
+  <div class="row" style="margin-top:8px"><input type="text" id="tel" value="${esc(S.tel)}" placeholder="Téléphone" aria-label="Téléphone"><input type="text" id="mail" value="${esc(S.mail)}" placeholder="E-mail professionnel" aria-label="E-mail professionnel"></div>
+  <div class="row" style="margin-top:8px"><input type="text" id="adr" value="${esc(S.adr)}" placeholder="Adresse (ville, pays)" aria-label="Adresse"><input type="text" id="nif" value="${esc(S.nif)}" placeholder="N° d’identification (NIF, RCCM…)" aria-label="Numéro d’identification"></div>
+  <div class="row" style="margin-top:8px"><label class="small">TVA (%)</label><input type="number" id="tva" value="${S.tva||0}" min="0" max="100" step="any" aria-label="TVA" style="max-width:100px;flex:0 1 100px"><span class="small">Laissez 0 si vous n’êtes pas assujetti.</span></div>
+  <div class="row" style="margin-top:8px"><textarea id="pay" rows="2" style="width:100%" placeholder="Modalités de paiement (ex. Mobile Money : +228 …)" aria-label="Modalités de paiement">${esc(S.pay)}</textarea></div>
+  <div class="row" style="margin-top:8px"><textarea id="cond" rows="2" style="width:100%" placeholder="Conditions ou mentions (ex. Paiement à réception.)" aria-label="Conditions">${esc(S.cond)}</textarea></div>
+  <div class="row" style="margin-top:8px">${S.logo?`<img src="${S.logo}" alt="Logo" style="height:48px;max-width:140px;object-fit:contain;border-radius:8px;background:#fff;padding:4px"><button class="btn ghost" id="logoX">Retirer le logo</button>`:""}<label class="btn alt sm" style="cursor:pointer">${S.logo?"Changer le logo":"Ajouter votre logo"}<input type="file" id="logo" accept="image/*" hidden></label></div>
   <div class="row" style="margin-top:8px"><label class="small">Objectif mensuel</label><input type="number" id="goal" value="${S.goal}" min="0" aria-label="Objectif mensuel" style="max-width:140px;flex:0 1 140px"><label class="small">Devise</label><input type="text" id="cur" value="${esc(S.cur)}" maxlength="6" aria-label="Devise" style="max-width:90px;flex:0 1 90px"></div></div>
   <div class="box"><h2>Données</h2><div class="row" style="margin-top:8px"><button class="btn alt" id="exp">Exporter (JSON)</button><button class="btn alt" id="out">Se déconnecter</button><button class="btn alt" id="rst" style="color:var(--rd)">Tout effacer</button></div></div>`;
 }
 
 function docText(d){
-  return `${d.type.toUpperCase()} ${d.num}\nDate : ${d.date}\n${S.me?"De : "+S.me+"\n":""}Client : ${cname(d.cid)}\n\n`+d.lines.map(l=>`- ${l.d} : ${l.q} × ${l.p.toFixed(2)} ${S.cur} = ${(l.q*l.p).toFixed(2)} ${S.cur}`).join("\n")+`\n\nTotal : ${total(d).toFixed(2)} ${S.cur}`;
+  const tv=d.tva||0,ht=total(d);
+  return `${d.type.toUpperCase()} ${d.num}\nDate : ${d.date}${d.due?"\n"+(d.type==="facture"?"Échéance : ":"Valable jusqu’au : ")+d.due:""}\n${S.me?"De : "+S.me+"\n":""}Client : ${cname(d.cid)}\n\n`+d.lines.map(l=>`- ${l.d} : ${l.q} × ${l.p.toFixed(2)} ${S.cur} = ${(l.q*l.p).toFixed(2)} ${S.cur}`).join("\n")+(tv?`\n\nSous-total : ${ht.toFixed(2)} ${S.cur}\nTVA ${tv} % : ${(ht*tv/100).toFixed(2)} ${S.cur}`:"")+`\n\nTotal : ${ttc(d).toFixed(2)} ${S.cur}`+(S.pay?`\n\nPaiement : ${S.pay}`:"")+`\n\nMerci pour votre confiance.`;
 }
 document.addEventListener("click",e=>{
   const b=e.target;
@@ -435,17 +530,21 @@ document.addEventListener("click",e=>{
   if(b.id==="refresh"){sb.auth.getSession().then(({data})=>{user=null;loadUser(data.session)});return}
   if(b.id==="cpn"){try{navigator.clipboard.writeText(PAY.num);b.textContent="Numéro copié"}catch(x){b.textContent="Copie impossible"}return}
   if(b.id==="rst"){if(confirm("Effacer toutes vos données ?")){S=def();save();go("accueil")}return}
-  const t=b.closest("[data-v],[data-del],[data-paid],[data-conv],[data-copy],[data-mode]");if(!t)return;
+  if(b.id==="logoX"){S.logo="";save();render();return}
+  if(b.id==="prn"){const d=S.docs.find(x=>x.id===openDoc),old=document.title;if(d)document.title=d.num+" - "+cname(d.cid);window.print();setTimeout(()=>{document.title=old},800);return}
+  const t=b.closest("[data-v],[data-del],[data-paid],[data-conv],[data-copy],[data-mode],[data-open]");if(!t)return;
   const D=t.dataset;
   if(D.v)go(D.v);
+  else if(D.open){openDoc=D.open;go("apercu")}
   else if(D.mode){authMode=D.mode;msg="";render()}
   else if(D.del){const[k,id]=D.del.split(":");S[k]=S[k].filter(x=>x.id!==id);save();render()}
   else if(D.paid){const d=S.docs.find(x=>x.id===D.paid);d.st="payé";d.paid=today();save();render()}
-  else if(D.conv){const d=S.docs.find(x=>x.id===D.conv);const n=S.docs.filter(x=>x.type==="facture").length+1;S.docs.unshift({id:uid(),type:"facture",num:"FA-"+String(n).padStart(3,"0"),cid:d.cid,lines:d.lines,st:"brouillon",date:today()});save();render()}
+  else if(D.conv){const d=S.docs.find(x=>x.id===D.conv);S.docs.unshift({id:uid(),type:"facture",num:nextNum("facture"),cid:d.cid,lines:d.lines,st:"brouillon",date:today(),due:addDays(today(),15),note:d.note||"",tva:S.tva||0,ref:d.num});save();render()}
   else if(D.copy){const d=S.docs.find(x=>x.id===D.copy);try{navigator.clipboard.writeText(docText(d));t.textContent="Copié"}catch(x){t.textContent="Copie impossible"}}
 });
 document.addEventListener("change",e=>{
   const c=e.target,D=c.dataset;
+  if(c.id==="logo"){if(c.files&&c.files[0])readLogo(c.files[0]);return}
   if(D.chk){S.taches.find(t=>t.id===D.chk).ok=c.checked;save();render()}
   else if(D.stage){S.clients.find(x=>x.id===D.stage).stage=c.value;save();render()}
   else if(D.st){const d=S.docs.find(x=>x.id===D.st);d.st=c.value;if(c.value==="payé")d.paid=today();save();render()}
@@ -453,6 +552,8 @@ document.addEventListener("change",e=>{
 document.addEventListener("input",e=>{
   const i=e.target.id;
   if(i==="me")S.me=e.target.value;
+  else if(["tel","mail","adr","nif","pay","cond"].includes(i))S[i]=e.target.value;
+  else if(i==="tva")S.tva=Math.min(100,Math.max(0,parseFloat(e.target.value)||0));
   else if(i==="goal")S.goal=Math.max(0,parseFloat(e.target.value)||0);
   else if(i==="cur")S.cur=e.target.value||"€";
   else return;
@@ -466,10 +567,9 @@ document.addEventListener("submit",e=>{
   if(f==="client")S.clients.unshift({id:uid(),nom:d.nom.trim(),info:d.info.trim(),stage:"Prospect"});
   if(f==="tache")S.taches.unshift({id:uid(),txt:d.txt.trim(),date:d.date,ok:false});
   if(f==="doc"){
-    const lines=[0,1,2].map(i=>({d:(d["l"+i]||"").trim(),q:parseFloat(d["q"+i])||0,p:parseFloat(d["p"+i])||0})).filter(l=>l.d);
+    const lines=[0,1,2,3,4].map(i=>({d:(d["l"+i]||"").trim(),q:parseFloat(d["q"+i])||0,p:parseFloat(d["p"+i])||0})).filter(l=>l.d);
     if(!lines.length)return;
-    const n=S.docs.filter(x=>x.type===d.type).length+1;
-    S.docs.unshift({id:uid(),type:d.type,num:(d.type==="devis"?"DV-":"FA-")+String(n).padStart(3,"0"),cid:d.cid,lines,st:"brouillon",date:today()});
+    S.docs.unshift({id:uid(),type:d.type,num:nextNum(d.type),cid:d.cid,lines,st:"brouillon",date:today(),due:addDays(today(),parseInt(d.dl,10)||0),note:(d.note||"").trim(),tva:S.tva||0});
   }
   save();render();
 });
