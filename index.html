@@ -382,8 +382,9 @@ async function doAuth(d,mode){
   lastEmail=d.email;msg="Un instant…";render();
   try{
     if(mode==="up"){const{data,error}=await sb.auth.signUp({email:d.email.trim(),password:d.pw});
-      if(error)msg="Inscription impossible : "+error.message;
-      else if(!data.session)msg="Compte créé. Vérifiez votre e-mail pour confirmer, puis connectez-vous.";else msg=""}
+      if(error)msg=/already|registered/i.test(error.message)?"Cet e-mail a déjà un compte. Connectez-vous.":"Inscription impossible : "+error.message;
+      else if(!data.session){const r=await sb.auth.signInWithPassword({email:d.email.trim(),password:d.pw});msg=r.error?(/confirm/i.test(r.error.message)?"Compte créé. Vérifiez votre e-mail pour confirmer, puis connectez-vous.":"Compte créé. Connectez-vous avec votre e-mail et votre mot de passe."):""}
+      else msg=""}
     else{const{error}=await sb.auth.signInWithPassword({email:d.email.trim(),password:d.pw});msg=error?"E-mail ou mot de passe incorrect.":""}
   }catch(x){msg="Connexion impossible. Vérifiez votre réseau et réessayez."}
   render();
@@ -528,7 +529,7 @@ function vTaches(){
   <div class="box">${S.taches.length?S.taches.map(t=>`<div class="item ${t.ok?"done":""}"><input type="checkbox" data-chk="${t.id}" ${t.ok?"checked":""} aria-label="Terminée"><span class="t">${esc(t.txt)}</span>${t.date?`<span class="small ${!t.ok&&t.date<today()?"late":""}">${esc(t.date)}</span>`:""}<button class="btn ghost" data-del="taches:${t.id}" aria-label="Supprimer">✕</button></div>`).join(""):'<div class="empty">Aucune tâche. Notez la prochaine relance client.</div>'}</div>`;
 }
 
-const PAY={num:"+228 91 29 43 45",wa:"22891294345",price:"2 000 FCFA"};
+const PAY={num:"+228 91 29 43 45",wa:"22891294345",price:"5 000 FCFA"};
 function payBody(lock){
   return `<div class="pay-grid">
     <div class="plan"><span class="ribbon">Tout inclus</span><h2>Atelier Freelance</h2><div class="price"><b>${PAY.price}</b><span> / mois</span></div>
