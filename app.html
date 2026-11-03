@@ -418,6 +418,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--ac);box-shadow:0 0 0 
 
 .trial{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 18px;padding:10px 12px 10px 20px;border-radius:999px;background:var(--gl);border:1px solid var(--gb);box-shadow:var(--gsh);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%)}
 .trial b{color:var(--ac)}
+.trial.warn{border-color:var(--ac);box-shadow:var(--gsh),0 0 0 3px rgba(29,139,208,.2)}
+.pill{font-weight:600;border-radius:99px;padding:5px 12px;font-size:.88rem;border:1px solid var(--gb);background:var(--gl2);white-space:nowrap}
+.pill.ok{color:var(--gn)}.pill.warn{color:var(--amt)}.pill.late{color:var(--rd)}
 </style>
 </head>
 <body>
@@ -428,7 +431,7 @@ const SB_URL="https://pitjolrfodfbxojkhvre.supabase.co",SB_KEY="sb_publishable_N
 const sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:"atelier-session"}});
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(x){}
 const def=()=>({cur:"€",goal:2000,me:"",tel:"",mail:"",adr:"",nif:"",tva:0,pay:"",cond:"",logo:"",clients:[],docs:[],taches:[]});
-let S=def(),view="accueil",openDoc="",payLink="",user=null,actif=false,dataOk=false,ready=false,msg="",tm=null,authMode="in",lastEmail="",paid=false,essaiFin=null;
+let S=def(),view="accueil",openDoc="",payLink="",user=null,actif=false,dataOk=false,ready=false,msg="",tm=null,authMode="in",lastEmail="",paid=false,rawPaid=false,essaiFin=null,finAbo=null,isAdmin=false,adminRows=null,adminMsg="";
 function save(){clearTimeout(tm);tm=setTimeout(async()=>{if(!user||!actif||!dataOk)return;try{const{error}=await sb.from("donnees").upsert({user_id:user.id,data:S,updated_at:new Date().toISOString()});if(error)console.error(error)}catch(x){console.error(x)}},600)}
 function vAuth(){const up=authMode==="up";
 return `<div class="auth">
@@ -442,18 +445,19 @@ return `<div class="auth">
 <p class="small">${up?"Un e-mail et un mot de passe suffisent. 7 jours d’essai gratuit, sans paiement.":"Connectez-vous pour retrouver vos clients et vos factures."}</p>
 <form data-form="auth"><label class="lb" for="em">Adresse e-mail</label><input id="em" type="email" name="email" required autocomplete="email" value="${esc(lastEmail)}" placeholder="vous@exemple.com">
 <label class="lb" for="pw">Mot de passe</label><div class="pwrap"><input id="pw" type="password" name="pw" required minlength="8" autocomplete="${up?"new-password":"current-password"}" placeholder="8 caractères minimum"><button type="button" class="eye" id="eye">Afficher</button></div>
+${up?`<label class="lb" for="wa">Téléphone WhatsApp (facultatif)</label><input id="wa" type="tel" name="tel" autocomplete="tel" placeholder="+228 90 00 00 00">`:""}
 <button class="btn big">${up?"Créer mon compte":"Se connecter"}</button>
 ${msg?`<p class="msg" role="status">${esc(msg)}</p>`:""}</form>
 </div></section></div>`}
 function vLock(){
   return `<div class="pay">
   <div class="pay-top"><span class="logo2"><i></i>Atelier Freelance</span><button class="btn ghost" id="out">Se déconnecter</button></div>
-  <div class="pay-hero">${trialOver()?`<span class="badge">Essai terminé</span><h1>Votre essai gratuit est terminé</h1><p class="sub">Abonnez-vous pour retrouver vos clients, devis et factures : tout est conservé sur votre compte.</p>`:`<span class="badge">Compte créé ✓</span><h1>Dernière étape : activez votre accès</h1><p class="sub">Bienvenue ${esc(user.email)}. Un abonnement mensuel vous donne accès à tout l’outil.</p>`}</div>
+  <div class="pay-hero">${subOver()?`<span class="badge">Abonnement expiré</span><h1>Votre abonnement a expiré</h1><p class="sub">Renouvelez pour retrouver votre accès : vos clients, devis et factures sont conservés sur votre compte.</p>`:trialOver()?`<span class="badge">Essai terminé</span><h1>Votre essai gratuit est terminé</h1><p class="sub">Abonnez-vous pour retrouver vos clients, devis et factures : tout est conservé sur votre compte.</p>`:`<span class="badge">Compte créé ✓</span><h1>Dernière étape : activez votre accès</h1><p class="sub">Bienvenue ${esc(user.email)}. Un abonnement mensuel vous donne accès à tout l’outil.</p>`}</div>
   ${payBody(true)}</div>`}
 async function doAuth(d,mode){
   lastEmail=d.email;msg="Un instant…";render();
   try{
-    if(mode==="up"){const{data,error}=await sb.auth.signUp({email:d.email.trim(),password:d.pw});
+    if(mode==="up"){const{data,error}=await sb.auth.signUp({email:d.email.trim(),password:d.pw,options:{data:{tel:(d.tel||"").trim()}}});
       if(error)msg=/already|registered/i.test(error.message)?"Cet e-mail a déjà un compte. Connectez-vous.":"Inscription impossible : "+error.message;
       else if(!data.session){const r=await sb.auth.signInWithPassword({email:d.email.trim(),password:d.pw});msg=r.error?(/confirm/i.test(r.error.message)?"Compte créé. Vérifiez votre e-mail pour confirmer, puis connectez-vous.":"Compte créé. Connectez-vous avec votre e-mail et votre mot de passe."):""}
       else msg=""}
@@ -462,19 +466,26 @@ async function doAuth(d,mode){
   render();
 }
 const trialLeft=()=>{if(paid||!essaiFin)return 0;const ms=new Date(essaiFin).getTime()-Date.now();return ms>0?Math.ceil(ms/864e5):0};
+const subLeft=()=>{if(!finAbo)return 0;const ms=new Date(finAbo).getTime()-Date.now();return ms>0?Math.ceil(ms/864e5):0};
+const subOver=()=>rawPaid&&!!finAbo&&subLeft()===0;
 const trialOver=()=>!paid&&!!essaiFin&&trialLeft()===0;
 async function loadUser(session){
   if(session&&user&&session.user.id===user.id&&actif)return;
-  user=session?session.user:null;actif=false;paid=false;essaiFin=null;dataOk=false;S=def();
+  user=session?session.user:null;actif=false;paid=false;rawPaid=false;essaiFin=null;finAbo=null;isAdmin=false;adminRows=null;adminMsg="";dataOk=false;S=def();
   if(user){
     try{
-      const q=async()=>{let r=await sb.from("abonnes").select("actif,essai_fin").eq("user_id",user.id).maybeSingle();if(r.error)r=await sb.from("abonnes").select("actif").eq("user_id",user.id).maybeSingle();return r};
+      const cols=["actif,essai_fin,abonnement_fin","actif,essai_fin","actif"];
+      const q=async()=>{let r;for(const c of cols){r=await sb.from("abonnes").select(c).eq("user_id",user.id).maybeSingle();if(!r.error)break}return r};
       let a=await q();
       if(a.error){await new Promise(r=>setTimeout(r,1200));a=await q()}
-      if(!a.error&&!a.data){try{await sb.from("abonnes").insert({user_id:user.id,email:user.email,actif:false})}catch(x){}a=await q()}
-      paid=!!(a.data&&a.data.actif);essaiFin=(a.data&&a.data.essai_fin)||null;
-      if(a.error){try{paid=localStorage.getItem("atelier-actif-"+user.id)==="1";essaiFin=localStorage.getItem("atelier-essai-"+user.id)||null}catch(x){}}else{try{localStorage.setItem("atelier-actif-"+user.id,paid?"1":"0");localStorage.setItem("atelier-essai-"+user.id,essaiFin||"")}catch(x){}}
+      if(!a.error&&!a.data){try{const tel=((user.user_metadata||{}).tel||"").trim();const ins=await sb.from("abonnes").insert(Object.assign({user_id:user.id,email:user.email,actif:false},tel?{telephone:tel}:{}));if(ins.error&&tel)await sb.from("abonnes").insert({user_id:user.id,email:user.email,actif:false})}catch(x){}a=await q()}
+      const row=a.data||{};
+      rawPaid=!!row.actif;essaiFin=row.essai_fin||null;finAbo=row.abonnement_fin||null;
+      if(a.error){try{const id=user.id;rawPaid=localStorage.getItem("atelier-actif-"+id)==="1";essaiFin=localStorage.getItem("atelier-essai-"+id)||null;finAbo=localStorage.getItem("atelier-fin-"+id)||null}catch(x){}}else{try{const id=user.id;localStorage.setItem("atelier-actif-"+id,rawPaid?"1":"0");localStorage.setItem("atelier-essai-"+id,essaiFin||"");localStorage.setItem("atelier-fin-"+id,finAbo||"")}catch(x){}}
+      paid=rawPaid&&!subOver();
       actif=paid||trialLeft()>0;
+      try{const r=await sb.rpc("est_admin");isAdmin=!r.error&&r.data===true}catch(x){}
+      if(isAdmin)actif=true;
       if(actif){const r=await sb.from("donnees").select("data").eq("user_id",user.id).maybeSingle();if(!r.error){S=Object.assign(def(),(r.data&&r.data.data)||{});dataOk=true}}
     }catch(x){console.error(x)}
   }
@@ -494,22 +505,24 @@ const STAGES=["Prospect","Devis envoyé","En cours","Terminé"];
 const STAT=["brouillon","envoyé","payé"];
 const SECT=[["accueil","Tableau de bord"],["clients","Clients"],["docs","Devis & factures"],["taches","Tâches"],["abo","S’abonner"],["reglages","Réglages"]];
 
-const IC={accueil:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',clients:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><circle cx="17.5" cy="9" r="2.5"/><path d="M17 14.5c2.6.2 4.2 1.8 4.5 4.5"/>',docs:'<path d="M6 3h8l5 5v13H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/>',taches:'<rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M8 12.5l3 3 5-6"/>',abo:'<rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M2.5 10h19M6.5 15h4"/>',reglages:'<circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/>'};
+const IC={admin:'<path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/>',accueil:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',clients:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><circle cx="17.5" cy="9" r="2.5"/><path d="M17 14.5c2.6.2 4.2 1.8 4.5 4.5"/>',docs:'<path d="M6 3h8l5 5v13H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/>',taches:'<rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M8 12.5l3 3 5-6"/>',abo:'<rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M2.5 10h19M6.5 15h4"/>',reglages:'<circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/>'};
 const ic=k=>`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[k]||""}</svg>`;
 const ini=n=>esc(((n||"?").trim()[0]||"?").toUpperCase());
 function nav(){
   const n={clients:S.clients.length,docs:S.docs.length,taches:S.taches.filter(t=>!t.ok).length};
   const em=user?user.email:"";
-  document.getElementById("nav").innerHTML='<div class="logo"><i></i>Atelier</div>'+SECT.map(([k,l])=>`<button data-v="${k}" ${(view===k||(k==="docs"&&view==="apercu"))?'aria-current="page"':""}><span class="ni">${ic(k)}</span><span class="nl">${l}</span>${n[k]?`<span class="cnt">${n[k]}</span>`:""}</button>`).join("")+`<div class="who"><span class="av">${ini(em)}</span><div><b>${esc(em)}</b><span>${paid?"Abonnement actif":trialLeft()?"Essai gratuit · "+trialLeft()+" j":"Accès actif"}</span></div></div>`;
+  document.getElementById("nav").innerHTML='<div class="logo"><i></i>Atelier</div>'+SECT.concat(isAdmin?[["admin","Administration"]]:[]).map(([k,l0],_i,_a,l=(k==="abo"&&paid)?"Mon abonnement":l0)=>`<button data-v="${k}" ${(view===k||(k==="docs"&&view==="apercu"))?'aria-current="page"':""}><span class="ni">${ic(k)}</span><span class="nl">${l}</span>${n[k]?`<span class="cnt">${n[k]}</span>`:""}</button>`).join("")+`<div class="who"><span class="av">${ini(em)}</span><div><b>${esc(em)}</b><span>${paid?"Abonnement actif":trialLeft()?"Essai gratuit · "+trialLeft()+" j":"Accès actif"}</span></div></div>`;
 }
-function go(v){view=v;render();window.scrollTo(0,0)}
-function trialBanner(){const n=trialLeft();if(paid||!n)return"";return `<div class="trial noprint"><span><b>Essai gratuit</b> · il vous reste ${n} jour${n>1?"s":""}</span><button class="btn sm" data-v="abo">S’abonner</button></div>`}
+function go(v){view=v;if(v==="admin"){adminRows=null;adminMsg=""}render();window.scrollTo(0,0)}
+function trialBanner(){
+  if(paid){const n=subLeft();if(finAbo&&n>0&&n<=7)return `<div class="trial${n<=3?" warn":""} noprint"><span><b>Abonnement</b> · il expire dans ${n} jour${n>1?"s":""}, le ${fdate(String(finAbo).slice(0,10))}</span><button class="btn sm" data-v="abo">Renouveler</button></div>`;return""}
+  const n=trialLeft();if(!n)return"";return `<div class="trial${n<=2?" warn":""} noprint"><span><b>Essai gratuit</b> · il vous reste ${n} jour${n>1?"s":""}</span><button class="btn sm" data-v="abo">S’abonner</button></div>`}
 function render(){
   const app=document.querySelector(".app"),mn=document.getElementById("main");
   const gate=!ready?'<p class="empty">Chargement…</p>':!user?vAuth():!actif?vLock():null;
   app.classList.toggle("solo",gate!==null);
   if(gate!==null){mn.innerHTML=gate;return}
-  nav();mn.innerHTML=trialBanner()+({accueil:vAccueil,clients:vClients,docs:vDocs,apercu:vApercu,taches:vTaches,abo:vAbo,reglages:vReglages})[view]()}
+  nav();mn.innerHTML=trialBanner()+({admin:vAdmin,accueil:vAccueil,clients:vClients,docs:vDocs,apercu:vApercu,taches:vTaches,abo:vAbo,reglages:vReglages})[view]()}
 
 function revChart(){
   const n=6,now=new Date(),fa=S.docs.filter(d=>d.type==="facture"&&d.st==="payé");
@@ -636,7 +649,25 @@ function payBody(lock){
       ${payLink?`<div style="margin-top:12px"><a class="btn" href="${payLink}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none">Envoyer la confirmation sur WhatsApp</a></div>`:""}
       ${lock?`<p class="small" style="margin-top:14px">⏳ En attente de paiement. Une fois votre compte activé, appuyez sur le bouton ci-dessous.</p><button class="btn alt" id="refresh">Actualiser mon accès</button>`:""}
     </div></div>`}
-function vAbo(){return `<h1>S’abonner</h1><p class="sub">Accès complet à Atelier Freelance, ${PAY.price} par mois.</p>`+payBody(false)}
+async function loadAdmin(){try{const r=await sb.rpc("liste_abonnes");adminRows=r.error?[]:(r.data||[]);if(r.error)adminMsg="Impossible de charger la liste : "+r.error.message}catch(x){adminRows=[]}render()}
+async function activer(email){if(!confirm("Activer l’abonnement de "+email+" pour 30 jours ?"))return;try{const r=await sb.rpc("admin_activer",{p_email:email,p_jours:30});adminMsg=r.error?"Échec : "+r.error.message:String(r.data||"Abonnement activé")}catch(x){adminMsg="Échec : vérifiez le réseau"}adminRows=null;render()}
+function stAb(r){const dl=t=>Math.ceil((new Date(t).getTime()-Date.now())/864e5);
+  if(r.actif){if(r.abonnement_fin){const n=dl(r.abonnement_fin);return n<=0?{t:"Expiré",k:"late",n:0,rel:"exp",f:r.abonnement_fin}:{t:"Abonné · "+n+" j",k:n<=7?"warn":"ok",n,rel:n<=7?"bientot":"",f:r.abonnement_fin}}return{t:"Abonné",k:"ok",rel:""}}
+  if(r.essai_fin){const n=dl(r.essai_fin);return n<=0?{t:"Essai terminé",k:"late",n:0,rel:"essai0"}:{t:"Essai · "+n+" j",k:"warn",n,rel:n<=3?"essai":""}}
+  return{t:"En attente",k:"warn",rel:"attente"}}
+function relMsg(r,st){const how=" envoyez "+PAY.price+" par mobile money au "+PAY.num+", puis confirmez dans l’application (page « Mon abonnement »). Merci !",j=n=>n+" jour"+(n>1?"s":""),d=st.f?fdate(String(st.f).slice(0,10)):"";
+  if(st.rel==="bientot")return "Bonjour, votre abonnement Atelier Freelance expire dans "+j(st.n)+" (le "+d+"). Pour le renouveler :"+how;
+  if(st.rel==="exp")return "Bonjour, votre abonnement Atelier Freelance a expiré le "+d+". Vos données sont conservées. Pour retrouver votre accès :"+how;
+  if(st.rel==="essai")return "Bonjour, votre essai gratuit Atelier Freelance se termine dans "+j(st.n)+". Pour continuer sans interruption :"+how;
+  if(st.rel==="essai0")return "Bonjour, votre essai gratuit Atelier Freelance est terminé. Vos données sont conservées. Pour retrouver votre accès :"+how;
+  return "Bonjour, merci pour votre inscription à Atelier Freelance. Pour activer votre accès :"+how}
+function waLink(r,st){const ph=String(r.telephone||"").replace(/\D/g,"").replace(/^00/,"");return "https://wa.me/"+ph+"?text="+encodeURIComponent(relMsg(r,st))}
+function vAdmin(){
+  if(adminRows===null){loadAdmin();return `<h1>Administration</h1><p class="empty">Chargement…</p>`}
+  const L=adminRows.map(r=>({r,st:stAb(r)})).sort((a,b)=>(b.st.rel?1:0)-(a.st.rel?1:0)),nb=L.filter(x=>x.st.rel).length;
+  return `<h1>Administration</h1><p class="sub">${L.length} compte${L.length>1?"s":""} · ${nb} à relancer. Le bouton WhatsApp prépare le message adapté.</p>`+(adminMsg?`<div class="box" role="status">${esc(adminMsg)}</div>`:"")+
+  `<div class="box">${L.length?L.map(({r,st})=>`<div class="item"><span class="t"><b>${esc(r.email)}</b><br><span class="small">${r.telephone?esc(r.telephone):"Téléphone non renseigné"}</span></span><span class="pill ${st.k}">${esc(st.t)}</span>${st.rel?`<a class="btn alt sm" target="_blank" rel="noopener" href="${waLink(r,st)}">Relancer sur WhatsApp</a>`:""}<button class="btn sm" data-act="${esc(r.email)}">Activer 30 jours</button></div>`).join(""):'<div class="empty">Aucun compte pour l’instant.</div>'}</div>`}
+function vAbo(){const ren=paid&&finAbo;return `<h1>${ren?"Mon abonnement":"S’abonner"}</h1><p class="sub">${ren?`Votre abonnement est actif jusqu’au ${fdate(String(finAbo).slice(0,10))}. Un renouvellement ajoute 30 jours à partir de cette date.`:`Accès complet à Atelier Freelance, ${PAY.price} par mois.`}</p>`+payBody(false)}
 function vReglages(){
   return `<h1>Réglages</h1><p class="sub">Vos données sont sauvegardées sur votre compte${user?" ("+esc(user.email)+")":""}.</p>
   <div class="box acct"><span class="av lg">${ini(user?user.email:"")}</span><div><b>${esc(user?user.email:"")}</b><br><span class="tag ok">Abonnement actif</span></div></div>
@@ -665,11 +696,12 @@ document.addEventListener("click",e=>{
   if(b.id==="rst"){if(confirm("Effacer toutes vos données ?")){S=def();save();go("accueil")}return}
   if(b.id==="logoX"){S.logo="";save();render();return}
   if(b.id==="prn"){const d=S.docs.find(x=>x.id===openDoc),old=document.title;if(d)document.title=d.num+" - "+cname(d.cid);window.print();setTimeout(()=>{document.title=old},800);return}
-  const t=b.closest("[data-v],[data-del],[data-paid],[data-conv],[data-copy],[data-mode],[data-open],[data-addln]");if(!t)return;
+  const t=b.closest("[data-v],[data-del],[data-paid],[data-conv],[data-copy],[data-mode],[data-open],[data-addln],[data-act]");if(!t)return;
   const D=t.dataset;
   if(D.addln){const ln=document.getElementById("ln");const n=ln.children.length;if(n<12){ln.insertAdjacentHTML("beforeend",lrow(n));ln.lastElementChild.querySelector("input").focus()}return}
   if(D.v)go(D.v);
   else if(D.open){openDoc=D.open;go("apercu")}
+  else if(D.act){activer(D.act)}
   else if(D.mode){authMode=D.mode;msg="";render()}
   else if(D.del){const[k,id]=D.del.split(":");S[k]=S[k].filter(x=>x.id!==id);save();render()}
   else if(D.paid){const d=S.docs.find(x=>x.id===D.paid);d.st="payé";d.paid=today();save();render()}
