@@ -415,6 +415,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--ac);box-shadow:0 0 0 
 .sh-sign div{height:104px;border:1px dashed #9fcbe6;border-radius:16px;padding:12px 16px}
 .sh-sign small{font-size:.74rem;font-weight:700;letter-spacing:.06em;color:#4d657d}
 @media (max-width:620px){.sh-sign{grid-template-columns:1fr}}
+
+.trial{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 18px;padding:10px 12px 10px 20px;border-radius:999px;background:var(--gl);border:1px solid var(--gb);box-shadow:var(--gsh);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%)}
+.trial b{color:var(--ac)}
 </style>
 </head>
 <body>
@@ -425,18 +428,18 @@ const SB_URL="https://pitjolrfodfbxojkhvre.supabase.co",SB_KEY="sb_publishable_N
 const sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:"atelier-session"}});
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(x){}
 const def=()=>({cur:"€",goal:2000,me:"",tel:"",mail:"",adr:"",nif:"",tva:0,pay:"",cond:"",logo:"",clients:[],docs:[],taches:[]});
-let S=def(),view="accueil",openDoc="",payLink="",user=null,actif=false,dataOk=false,ready=false,msg="",tm=null,authMode="in",lastEmail="";
+let S=def(),view="accueil",openDoc="",payLink="",user=null,actif=false,dataOk=false,ready=false,msg="",tm=null,authMode="in",lastEmail="",paid=false,essaiFin=null;
 function save(){clearTimeout(tm);tm=setTimeout(async()=>{if(!user||!actif||!dataOk)return;try{const{error}=await sb.from("donnees").upsert({user_id:user.id,data:S,updated_at:new Date().toISOString()});if(error)console.error(error)}catch(x){console.error(x)}},600)}
 function vAuth(){const up=authMode==="up";
 return `<div class="auth">
 <aside class="brand"><div class="bphoto"></div><span class="logo3"><i></i>Atelier Freelance</span>
 <div><h1>Votre activité de freelance, enfin bien rangée.</h1>
 <ul class="bl"><li><b>Clients</b> suivis de la prospection à la fin de mission</li><li><b>Devis &amp; factures</b> créés en quelques minutes</li><li><b>Revenus</b> visibles d’un coup d’œil</li></ul></div>
-<p class="bsm">À partir de ${PAY.price} par mois · paiement par mobile money</p><span class="sh s1"></span><span class="sh s2"></span></aside>
+<p class="bsm">7 jours d’essai gratuit, puis ${PAY.price} par mois · paiement par mobile money</p><span class="sh s1"></span><span class="sh s2"></span></aside>
 <section class="fside"><div class="fcard">
 <div class="tabs" role="tablist"><button type="button" role="tab" aria-selected="${!up}" data-mode="in">Connexion</button><button type="button" role="tab" aria-selected="${up}" data-mode="up">Créer un compte</button></div>
 <h2>${up?"Créez votre compte":"Content de vous revoir"}</h2>
-<p class="small">${up?"Un e-mail et un mot de passe suffisent. Vous activerez ensuite votre abonnement.":"Connectez-vous pour retrouver vos clients et vos factures."}</p>
+<p class="small">${up?"Un e-mail et un mot de passe suffisent. 7 jours d’essai gratuit, sans paiement.":"Connectez-vous pour retrouver vos clients et vos factures."}</p>
 <form data-form="auth"><label class="lb" for="em">Adresse e-mail</label><input id="em" type="email" name="email" required autocomplete="email" value="${esc(lastEmail)}" placeholder="vous@exemple.com">
 <label class="lb" for="pw">Mot de passe</label><div class="pwrap"><input id="pw" type="password" name="pw" required minlength="8" autocomplete="${up?"new-password":"current-password"}" placeholder="8 caractères minimum"><button type="button" class="eye" id="eye">Afficher</button></div>
 <button class="btn big">${up?"Créer mon compte":"Se connecter"}</button>
@@ -445,7 +448,7 @@ ${msg?`<p class="msg" role="status">${esc(msg)}</p>`:""}</form>
 function vLock(){
   return `<div class="pay">
   <div class="pay-top"><span class="logo2"><i></i>Atelier Freelance</span><button class="btn ghost" id="out">Se déconnecter</button></div>
-  <div class="pay-hero"><span class="badge">Compte créé ✓</span><h1>Dernière étape : activez votre accès</h1><p class="sub">Bienvenue ${esc(user.email)}. Un abonnement mensuel vous donne accès à tout l’outil.</p></div>
+  <div class="pay-hero">${trialOver()?`<span class="badge">Essai terminé</span><h1>Votre essai gratuit est terminé</h1><p class="sub">Abonnez-vous pour retrouver vos clients, devis et factures : tout est conservé sur votre compte.</p>`:`<span class="badge">Compte créé ✓</span><h1>Dernière étape : activez votre accès</h1><p class="sub">Bienvenue ${esc(user.email)}. Un abonnement mensuel vous donne accès à tout l’outil.</p>`}</div>
   ${payBody(true)}</div>`}
 async function doAuth(d,mode){
   lastEmail=d.email;msg="Un instant…";render();
@@ -458,16 +461,20 @@ async function doAuth(d,mode){
   }catch(x){msg="Connexion impossible. Vérifiez votre réseau et réessayez."}
   render();
 }
+const trialLeft=()=>{if(paid||!essaiFin)return 0;const ms=new Date(essaiFin).getTime()-Date.now();return ms>0?Math.ceil(ms/864e5):0};
+const trialOver=()=>!paid&&!!essaiFin&&trialLeft()===0;
 async function loadUser(session){
   if(session&&user&&session.user.id===user.id&&actif)return;
-  user=session?session.user:null;actif=false;dataOk=false;S=def();
+  user=session?session.user:null;actif=false;paid=false;essaiFin=null;dataOk=false;S=def();
   if(user){
     try{
-      let a=await sb.from("abonnes").select("actif").eq("user_id",user.id).maybeSingle();
-      if(a.error){await new Promise(r=>setTimeout(r,1200));a=await sb.from("abonnes").select("actif").eq("user_id",user.id).maybeSingle()}
-      if(!a.error&&!a.data){try{await sb.from("abonnes").insert({user_id:user.id,email:user.email,actif:false})}catch(x){}}
-      actif=!!(a.data&&a.data.actif);
-      if(a.error){try{actif=localStorage.getItem("atelier-actif-"+user.id)==="1"}catch(x){}}else{try{localStorage.setItem("atelier-actif-"+user.id,actif?"1":"0")}catch(x){}}
+      const q=async()=>{let r=await sb.from("abonnes").select("actif,essai_fin").eq("user_id",user.id).maybeSingle();if(r.error)r=await sb.from("abonnes").select("actif").eq("user_id",user.id).maybeSingle();return r};
+      let a=await q();
+      if(a.error){await new Promise(r=>setTimeout(r,1200));a=await q()}
+      if(!a.error&&!a.data){try{await sb.from("abonnes").insert({user_id:user.id,email:user.email,actif:false})}catch(x){}a=await q()}
+      paid=!!(a.data&&a.data.actif);essaiFin=(a.data&&a.data.essai_fin)||null;
+      if(a.error){try{paid=localStorage.getItem("atelier-actif-"+user.id)==="1";essaiFin=localStorage.getItem("atelier-essai-"+user.id)||null}catch(x){}}else{try{localStorage.setItem("atelier-actif-"+user.id,paid?"1":"0");localStorage.setItem("atelier-essai-"+user.id,essaiFin||"")}catch(x){}}
+      actif=paid||trialLeft()>0;
       if(actif){const r=await sb.from("donnees").select("data").eq("user_id",user.id).maybeSingle();if(!r.error){S=Object.assign(def(),(r.data&&r.data.data)||{});dataOk=true}}
     }catch(x){console.error(x)}
   }
@@ -493,15 +500,16 @@ const ini=n=>esc(((n||"?").trim()[0]||"?").toUpperCase());
 function nav(){
   const n={clients:S.clients.length,docs:S.docs.length,taches:S.taches.filter(t=>!t.ok).length};
   const em=user?user.email:"";
-  document.getElementById("nav").innerHTML='<div class="logo"><i></i>Atelier</div>'+SECT.map(([k,l])=>`<button data-v="${k}" ${(view===k||(k==="docs"&&view==="apercu"))?'aria-current="page"':""}><span class="ni">${ic(k)}</span><span class="nl">${l}</span>${n[k]?`<span class="cnt">${n[k]}</span>`:""}</button>`).join("")+`<div class="who"><span class="av">${ini(em)}</span><div><b>${esc(em)}</b><span>Abonnement actif</span></div></div>`;
+  document.getElementById("nav").innerHTML='<div class="logo"><i></i>Atelier</div>'+SECT.map(([k,l])=>`<button data-v="${k}" ${(view===k||(k==="docs"&&view==="apercu"))?'aria-current="page"':""}><span class="ni">${ic(k)}</span><span class="nl">${l}</span>${n[k]?`<span class="cnt">${n[k]}</span>`:""}</button>`).join("")+`<div class="who"><span class="av">${ini(em)}</span><div><b>${esc(em)}</b><span>${paid?"Abonnement actif":trialLeft()?"Essai gratuit · "+trialLeft()+" j":"Accès actif"}</span></div></div>`;
 }
 function go(v){view=v;render();window.scrollTo(0,0)}
+function trialBanner(){const n=trialLeft();if(paid||!n)return"";return `<div class="trial noprint"><span><b>Essai gratuit</b> · il vous reste ${n} jour${n>1?"s":""}</span><button class="btn sm" data-v="abo">S’abonner</button></div>`}
 function render(){
   const app=document.querySelector(".app"),mn=document.getElementById("main");
   const gate=!ready?'<p class="empty">Chargement…</p>':!user?vAuth():!actif?vLock():null;
   app.classList.toggle("solo",gate!==null);
   if(gate!==null){mn.innerHTML=gate;return}
-  nav();mn.innerHTML=({accueil:vAccueil,clients:vClients,docs:vDocs,apercu:vApercu,taches:vTaches,abo:vAbo,reglages:vReglages})[view]()}
+  nav();mn.innerHTML=trialBanner()+({accueil:vAccueil,clients:vClients,docs:vDocs,apercu:vApercu,taches:vTaches,abo:vAbo,reglages:vReglages})[view]()}
 
 function revChart(){
   const n=6,now=new Date(),fa=S.docs.filter(d=>d.type==="facture"&&d.st==="payé");
