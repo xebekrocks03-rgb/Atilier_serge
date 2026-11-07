@@ -3,86 +3,135 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0a1f3a">
+<meta name="theme-color" content="#1b0b3b">
 <meta name="description" content="Atelier Freelance : suivez vos clients, créez vos devis et factures, et regardez vos revenus grandir. 5 000 FCFA par mois, paiement par mobile money.">
+<meta property="og:title" content="Atelier Freelance – vos clients, devis, factures et revenus au même endroit">
+<meta property="og:description" content="Suivez vos clients, créez vos devis et factures, et regardez vos revenus grandir. 5 000 FCFA par mois, paiement par mobile money.">
+<meta property="og:type" content="website">
 <title>Atelier Freelance – vos clients, devis, factures et revenus au même endroit</title>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#e6f1f9;--ink:#0b1a2b;--mut:#4d657d;--ac:#1d8bd0;--acs:rgba(29,139,208,.13);--gn:#17a089;
---gl:linear-gradient(140deg,rgba(255,255,255,.8),rgba(214,236,250,.36));--gb:rgba(255,255,255,.88);
---gsh:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(160,205,235,.35),0 16px 40px rgba(30,90,140,.15);
---bgi:radial-gradient(60% 45% at 8% 2%,rgba(110,200,245,.65),transparent 62%),radial-gradient(45% 40% at 96% 6%,rgba(200,230,255,.9),transparent 62%),linear-gradient(180deg,#f2f9fe,#dcebf7);
---btn:#04223a;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root{--bg:#050d1a;--ink:#e8f4fc;--mut:#8fb0c9;--ac:#7fd0f0;--acs:rgba(127,208,240,.18);--gn:#52d6bd;
---gl:linear-gradient(140deg,rgba(200,235,255,.16),rgba(120,190,235,.05));--gb:rgba(200,236,255,.22);
---gsh:inset 0 1px 0 rgba(220,244,255,.34),0 18px 42px rgba(0,8,24,.5);
---bgi:radial-gradient(60% 45% at 8% 2%,rgba(40,130,200,.5),transparent 62%),radial-gradient(45% 40% at 96% 6%,rgba(90,170,230,.3),transparent 62%),linear-gradient(180deg,#07142a,#030914);color-scheme:dark}}
+:root{--pr:124,58,237;--p2r:217,70,239;--gr:251,191,36;--pdr:27,11,59;
+--bg:#f7f3ff;--ink:#170c33;--mut:#5d5679;--ac:#7c3aed;--acs:rgba(124,58,237,.12);--gn:#13a07a;
+--g1:#7c3aed;--g2:#d946ef;--g3:#f59e0b;
+--gl:linear-gradient(140deg,rgba(255,255,255,.84),rgba(255,255,255,.40));--gb:rgba(255,255,255,.92);
+--gsh:inset 0 1px 0 #fff,0 18px 44px rgba(124,58,237,.16);--solid:rgba(255,255,255,.95);
+--bgi:radial-gradient(60% 45% at 6% 0%,rgba(167,139,250,.55),transparent 62%),radial-gradient(50% 40% at 100% 8%,rgba(251,191,36,.30),transparent 62%),radial-gradient(60% 50% at 90% 70%,rgba(217,70,239,.20),transparent 65%),linear-gradient(180deg,#faf7ff,#efe7ff);
+color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root{--bg:#0b0618;--ink:#f3ecff;--mut:#b4a8d6;--ac:#a78bfa;--acs:rgba(167,139,250,.18);--gn:#4fd6b0;
+--g1:#a78bfa;--g2:#f0abfc;--g3:#fbbf24;
+--gl:linear-gradient(140deg,rgba(255,255,255,.13),rgba(255,255,255,.04));--gb:rgba(255,255,255,.17);
+--gsh:inset 0 1px 0 rgba(255,255,255,.2),0 18px 44px rgba(0,0,0,.5);--solid:rgba(22,12,46,.95);
+--bgi:radial-gradient(60% 45% at 6% 0%,rgba(124,58,237,.5),transparent 62%),radial-gradient(50% 40% at 100% 8%,rgba(251,191,36,.13),transparent 62%),radial-gradient(60% 50% at 90% 70%,rgba(217,70,239,.22),transparent 65%),linear-gradient(180deg,#0e0720,#07030f);color-scheme:dark}}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:80px;background:var(--bg)}
-body{margin:0;color:var(--ink);font:17px/1.6 Figtree,system-ui,sans-serif;background:var(--bgi) fixed;-webkit-font-smoothing:antialiased}
-h1,h2,h3{font-family:"Bricolage Grotesque",Figtree,sans-serif;margin:0;line-height:1.12;letter-spacing:-.02em}
+html{scroll-behavior:smooth;scroll-padding-top:90px;background:var(--bg);overflow-x:clip}
+body{margin:0;color:var(--ink);font:17px/1.6 Figtree,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:var(--bgi);pointer-events:none;transform:translateZ(0)}
+.orb{position:fixed;z-index:-1;border-radius:50%;pointer-events:none;width:560px;height:560px;opacity:.55;background:radial-gradient(circle at 35% 35%,rgba(217,70,239,.55),rgba(124,58,237,0) 66%);animation:fl 24s ease-in-out infinite alternate}
+.o1{top:6%;right:-190px}
+.o2{bottom:-160px;left:-190px;background:radial-gradient(circle at 40% 40%,rgba(251,191,36,.45),rgba(124,58,237,0) 66%);animation-delay:-9s}
+@keyframes fl{to{transform:translate3d(-70px,50px,0) scale(1.12)}}
+h1,h2,h3{font-family:"Bricolage Grotesque",Figtree,sans-serif;margin:0;line-height:1.1;letter-spacing:-.02em}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--ac);outline-offset:3px}
-.wrap{max-width:1040px;margin:0 auto;padding:0 clamp(18px,4vw,32px)}
-.glass{background:var(--gl);border:1px solid var(--gb);box-shadow:var(--gsh);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%)}
-header{position:sticky;top:10px;z-index:10;margin:10px auto 0;max-width:1040px;width:calc(100% - 24px);border-radius:999px;padding:8px 10px 8px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.logo{font:800 1.15rem "Bricolage Grotesque",sans-serif;text-decoration:none;display:flex;align-items:center;gap:9px}
-.logo i{width:13px;height:13px;border-radius:4px;background:linear-gradient(135deg,#d9f2ff,#4fb6ea);box-shadow:0 0 14px rgba(110,200,245,.7);transform:rotate(12deg)}
+.wrap{max-width:1060px;margin:0 auto;padding:0 clamp(18px,4vw,32px)}
+.glass{background:var(--gl);border:1px solid var(--gb);box-shadow:var(--gsh);-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%)}
+.gt{background:linear-gradient(100deg,var(--g1),var(--g2) 55%,var(--g3));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+header{position:sticky;top:10px;z-index:10;margin:10px auto 0;max-width:1060px;width:calc(100% - 24px);border-radius:999px;padding:8px 10px 8px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font:800 1.15rem "Bricolage Grotesque",sans-serif;white-space:nowrap;text-decoration:none;display:flex;align-items:center;gap:9px}
+.logo i{width:14px;height:14px;border-radius:5px;background:linear-gradient(135deg,#fde68a,#f59e0b);box-shadow:0 0 16px rgba(251,191,36,.8);transform:rotate(12deg)}
 header nav{display:flex;gap:6px;align-items:center}
 header nav a.l{text-decoration:none;color:var(--mut);padding:8px 14px;border-radius:999px;font-weight:500}
 header nav a.l:hover{color:var(--ink)}
-.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-weight:600;border-radius:999px;padding:12px 24px;border:1px solid var(--gb);color:var(--btn);background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0) 55%),linear-gradient(135deg,#5cc3f0,#1d8bd0);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 8px 22px rgba(29,139,208,.34);transition:transform .15s,box-shadow .2s}
-.btn:hover{transform:translateY(-1px)}.btn:active{transform:scale(.97)}
-.btn.sm{padding:9px 18px}
-.btn.alt{background:var(--gl);color:var(--ink);box-shadow:var(--gsh)}
-.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(24px,5vw,56px);align-items:center;padding:clamp(48px,9vw,96px) 0 clamp(40px,7vw,72px)}
-.hero h1{font-size:clamp(2.3rem,6vw,3.8rem);font-weight:800}
-.hero p.lead{font-size:1.15rem;color:var(--mut);max-width:34em;margin:18px 0 28px}
+.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-weight:600;border-radius:999px;padding:13px 26px;border:1px solid rgba(255,255,255,.5);color:#fff;background:linear-gradient(180deg,rgba(255,255,255,.34),rgba(255,255,255,0) 55%),linear-gradient(135deg,#7c3aed,#c026d3);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 12px 28px rgba(124,58,237,.42);transition:transform .15s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 16px 34px rgba(124,58,237,.5)}.btn:active{transform:scale(.97)}
+.btn.sm{padding:9px 20px;white-space:nowrap}
+.btn.alt{background:var(--gl);color:var(--ink);border-color:var(--gb);box-shadow:var(--gsh)}
+.btn.light{background:#fff;color:#4c1d95;border-color:#fff;box-shadow:0 14px 34px rgba(0,0,0,.28)}
+.pill{display:inline-flex;gap:8px;align-items:center;padding:7px 16px;border-radius:999px;font-size:.88rem;font-weight:600;background:var(--gl);border:1px solid var(--gb);box-shadow:var(--gsh);margin-bottom:20px}
+.pill b{color:var(--g3)}
+.hero{display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(28px,6vw,64px);align-items:center;padding:clamp(44px,8vw,88px) 0 clamp(48px,8vw,84px)}
+.hero h1{font-size:clamp(2.4rem,6.2vw,4rem);font-weight:800}
+.hero p.lead{font-size:1.15rem;color:var(--mut);max-width:34em;margin:20px 0 30px}
 .cta{display:flex;gap:12px;flex-wrap:wrap}
-.note{margin-top:14px;color:var(--mut);font-size:.92rem}
-.inv{border-radius:28px;padding:22px;position:relative}
+.note{margin-top:16px;color:var(--mut);font-size:.92rem}
+.vis{position:relative;padding:62px 14px 54px}
+.inv{border-radius:30px;padding:24px;position:relative;transform:rotate(1.6deg)}
 .inv .top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
-.inv h3{font-size:1.5rem;letter-spacing:.04em}
+.inv h3{font-size:1.5rem;letter-spacing:.1em;color:var(--ac)}
 .inv small,.ex{color:var(--mut);font-size:.82rem}
 .inv .cl{margin:16px 0;padding:12px 14px;border-radius:14px;background:var(--acs)}
 .inv table{width:100%;border-collapse:collapse;font-size:.94rem}
-.inv td{padding:9px 0;border-bottom:1px solid var(--gb)}
+.inv td{padding:10px 0;border-bottom:1px solid var(--gb)}
 .inv td:last-child{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-.inv .tot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding:14px 16px;border-radius:16px;background:linear-gradient(135deg,#0a1f3a,#0f5a92);color:#fff;font-weight:700;font-size:1.1rem}
-.stamp{position:absolute;right:20px;bottom:76px;transform:rotate(-9deg);border:3px solid var(--gn);color:var(--gn);font:800 1.3rem Figtree,sans-serif;letter-spacing:.12em;padding:2px 14px;border-radius:10px;background:var(--gl)}
-section{padding:clamp(36px,6vw,64px) 0}
-section>.wrap>h2,.price-h h2{font-size:clamp(1.7rem,4vw,2.5rem);max-width:20em}
+.inv .tot{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding:15px 18px;border-radius:18px;background:linear-gradient(135deg,rgb(var(--pdr)),#6d28d9 60%,#c026d3);color:#fff;font-weight:700;font-size:1.1rem}
+.inv .tot span:first-child{color:#fcd34d;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase}
+.stamp{position:absolute;right:24px;top:132px;transform:rotate(-9deg);border:3px solid var(--gn);color:var(--gn);font:800 1.3rem Figtree,sans-serif;letter-spacing:.12em;padding:2px 14px;border-radius:10px;background:var(--solid)}
+.fl{position:absolute;border-radius:20px;padding:12px 16px;animation:bob 7s ease-in-out infinite alternate}
+.fl small{display:block;color:var(--mut);font-size:.76rem}
+.fl b{font:800 1.15rem "Bricolage Grotesque",sans-serif;display:block}
+.fl1{right:18px;top:-4px}
+.fl2{left:8px;bottom:0;min-width:170px;animation-delay:-3s}
+.up{color:var(--gn);font-weight:700;font-size:.85rem}
+.bar{height:9px;border-radius:99px;background:var(--acs);margin:8px 0 6px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--g1),var(--g2),var(--g3))}
+@keyframes bob{to{transform:translateY(-9px)}}
+.eye{display:inline-block;font-size:.8rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--g3);margin:0 0 10px}
+section{padding:clamp(36px,6vw,66px) 0}
+section>.wrap>h2,.price h2{font-size:clamp(1.8rem,4.2vw,2.6rem);max-width:20em}
 section>.wrap>p.sub{color:var(--mut);max-width:38em;margin:12px 0 0}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:30px}
-.card{border-radius:24px;padding:24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:32px}
+.card{border-radius:26px;padding:26px;transition:transform .2s}
+.card:hover{transform:translateY(-4px)}
+.ic{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;margin-bottom:16px;color:#fff;background:linear-gradient(135deg,#7c3aed,#d946ef);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 10px 22px rgba(124,58,237,.35)}
+.ic svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.card:nth-child(2) .ic{background:linear-gradient(135deg,#d946ef,#f59e0b)}
+.card:nth-child(3) .ic{background:linear-gradient(135deg,#6d28d9,#3b82f6)}
+.card:nth-child(4) .ic{background:linear-gradient(135deg,#f59e0b,#ef4444)}
 .card h3{font-size:1.2rem;margin-bottom:8px}
 .card p{margin:0;color:var(--mut)}
-.steps{counter-reset:s;display:grid;gap:14px;margin:30px 0 0;padding:0;list-style:none}
-.steps li{counter-increment:s;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;border-radius:22px;padding:18px 22px}
-.steps li::before{content:counter(s);display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--acs);color:var(--ac);font:800 1.1rem "Bricolage Grotesque",sans-serif}
+.steps{counter-reset:s;display:grid;gap:14px;margin:32px 0 0;padding:0;list-style:none}
+.steps li{counter-increment:s;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;border-radius:24px;padding:20px 24px}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:42px;height:42px;border-radius:50%;color:#fff;background:linear-gradient(135deg,#7c3aed,#d946ef);box-shadow:0 8px 18px rgba(124,58,237,.35);font:800 1.15rem "Bricolage Grotesque",sans-serif}
 .steps b{display:block}.steps span{color:var(--mut)}
-.price{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,44px);align-items:center;border-radius:34px;padding:clamp(24px,5vw,48px)}
-.amount{font:800 clamp(2.8rem,8vw,4.4rem) "Bricolage Grotesque",sans-serif;color:var(--ac);line-height:1}
-.amount span{font:500 1.1rem Figtree,sans-serif;color:var(--mut)}
+.price{position:relative;border-radius:36px;padding:2px;background:linear-gradient(135deg,#7c3aed,#d946ef 55%,#f59e0b);box-shadow:0 26px 60px rgba(124,58,237,.3)}
+.price-in{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,44px);align-items:center;border-radius:34px;padding:clamp(26px,5vw,52px);background:var(--solid)}
+.rib{display:inline-block;background:linear-gradient(135deg,#fde68a,#f59e0b);color:#4a2a00;font-weight:700;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:999px;margin-bottom:14px}
+.amount{font:800 clamp(2.4rem,6.5vw,3.7rem) "Bricolage Grotesque",sans-serif;white-space:nowrap;line-height:1;background:linear-gradient(100deg,var(--g1),var(--g2));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.amount span{display:block;margin-top:6px;font:500 1.1rem Figtree,sans-serif;color:var(--mut);-webkit-text-fill-color:var(--mut)}
 .feat{list-style:none;margin:0;padding:0}
-.feat li{padding:9px 0 9px 30px;position:relative;border-top:1px solid var(--gb)}
-.feat li::before{content:"✓";position:absolute;left:4px;color:var(--gn);font-weight:700}
-.num{display:inline-block;font:700 1.1rem ui-monospace,monospace;background:var(--acs);color:var(--ac);padding:2px 10px;border-radius:8px}
-details{border-radius:20px;padding:4px 22px;margin-top:12px}
-summary{cursor:pointer;font-weight:600;padding:16px 0;list-style:none;display:flex;justify-content:space-between;gap:12px}
+.feat li{padding:10px 0 10px 32px;position:relative;border-top:1px solid var(--gb)}
+.feat li::before{content:"✓";position:absolute;left:4px;color:#fff;background:var(--gn);width:20px;height:20px;border-radius:50%;font-size:.72rem;font-weight:700;display:grid;place-items:center;top:13px;left:0}
+.num{display:inline-block;font:700 1.05rem ui-monospace,monospace;background:var(--acs);color:var(--ac);padding:2px 10px;border-radius:8px}
+details{border-radius:22px;padding:4px 24px;margin-top:12px}
+summary{cursor:pointer;font-weight:600;padding:17px 0;list-style:none;display:flex;justify-content:space-between;gap:12px}
 summary::-webkit-details-marker{display:none}
-summary::after{content:"+";color:var(--ac);font-size:1.4rem;line-height:1}
+summary::after{content:"+";color:var(--ac);font-size:1.5rem;line-height:1}
 details[open] summary::after{content:"–"}
-details p{margin:0 0 16px;color:var(--mut)}
-.end{text-align:center;border-radius:34px;padding:clamp(32px,6vw,60px)}
-.end h2{margin:0 auto 12px;font-size:clamp(1.8rem,4.5vw,2.8rem)}
-.end p{color:var(--mut);margin:0 auto 24px;max-width:30em}
-footer{padding:28px 0 40px;color:var(--mut);font-size:.9rem;text-align:center}
-@media (max-width:820px){.hero,.price{grid-template-columns:1fr}header nav a.l{display:none}.stamp{bottom:70px}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+details p{margin:0 0 17px;color:var(--mut)}
+.end{position:relative;overflow:hidden;text-align:center;border-radius:36px;padding:clamp(36px,7vw,72px);color:#fff;background:radial-gradient(90% 120% at 0% 0%,rgba(255,255,255,.22),transparent 55%),linear-gradient(135deg,rgb(var(--pdr)) 0%,#6d28d9 55%,#c026d3 115%);box-shadow:0 30px 70px rgba(124,58,237,.38)}
+.end h2{margin:0 auto 12px;font-size:clamp(1.9rem,4.6vw,3rem)}
+.end p{color:rgba(255,255,255,.85);margin:0 auto 26px;max-width:30em}
+footer{padding:28px 0 44px;color:var(--mut);font-size:.9rem;text-align:center}
+.js .rv{opacity:0;transform:translateY(22px);transition:opacity .7s,transform .7s}
+.js .rv.in{opacity:1;transform:none}
+@media (max-width:820px){
+.hero,.price-in{grid-template-columns:1fr}
+header nav a.l{display:none}
+.glass,.card,.fl,.pill{-webkit-backdrop-filter:none;backdrop-filter:none}
+.glass{background:linear-gradient(140deg,rgba(255,255,255,.9),rgba(255,255,255,.6))}
+.orb{animation:none}
+.fl1{right:8px}.fl2{left:0}
+.inv{transform:none}
+.inv .tot{font-size:1rem;padding:14px}.inv .tot span{white-space:nowrap}.inv .tot span:first-child{font-size:.72rem;letter-spacing:.08em}
+.logo{font-size:1.02rem}.btn.sm{padding:8px 16px}
+}
+@media (max-width:820px) and (prefers-color-scheme:dark){.glass{background:linear-gradient(140deg,rgba(255,255,255,.14),rgba(255,255,255,.06))}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}.js .rv{opacity:1;transform:none}}
 </style>
 </head>
 <body>
+<div class="orb o1"></div><div class="orb o2"></div>
 <header class="glass">
   <a class="logo" href="#haut"><i></i>Atelier Freelance</a>
   <nav><a class="l" href="#outils">Outils</a><a class="l" href="#demarrer">Démarrer</a><a class="l" href="#tarif">Tarif</a><a class="l" href="#faq">Questions</a><a class="btn sm" href="app.html">Se connecter</a></nav>
@@ -91,53 +140,61 @@ footer{padding:28px 0 40px;color:var(--mut);font-size:.9rem;text-align:center}
 <main id="haut">
 <div class="wrap">
   <div class="hero">
-    <div>
-      <h1>Vos clients, vos devis et vos factures au même endroit.</h1>
+    <div class="rv">
+      <span class="pill"><b>✦</b> 7 jours d’essai gratuit · puis 5 000 FCFA / mois</span>
+      <h1>Vos clients, vos devis et vos factures <span class="gt">au même endroit.</span></h1>
       <p class="lead">Atelier Freelance range votre activité : qui vous devez relancer, ce qui est payé, et combien vous gagnez ce mois-ci. Tout fonctionne depuis votre téléphone.</p>
-      <div class="cta"><a class="btn" href="app.html">Essayer gratuitement 7 jours</a><a class="btn alt" href="#tarif">Voir le tarif</a></div>
+      <div class="cta"><a class="btn" href="app.html#inscription">Essayer gratuitement 7 jours</a><a class="btn alt" href="#tarif">Voir le tarif</a></div>
       <p class="note">Sans paiement pour commencer, puis 5 000 FCFA par mois par mobile money.</p>
     </div>
-    <div class="inv glass" aria-label="Exemple de facture">
-      <div class="top"><div><h3>FACTURE</h3><small>N° F-2026-014 · exemple</small></div><small>Échéance 15 novembre</small></div>
-      <div class="cl"><small>Facturé à</small><br><b>Studio Kora</b></div>
-      <table><tr><td>Identité visuelle</td><td>150 000 FCFA</td></tr><tr><td>Page d’accueil du site</td><td>90 000 FCFA</td></tr><tr><td>Retouches</td><td>25 000 FCFA</td></tr></table>
-      <div class="tot"><span>Total à payer</span><span>265 000 FCFA</span></div>
-      <div class="stamp">PAYÉE</div>
+    <div class="vis rv">
+      <div class="inv glass" aria-label="Exemple de facture">
+        <div class="top"><div><h3>FACTURE</h3><small>N° F-2026-014 · exemple</small></div><small>Échéance 15 novembre</small></div>
+        <div class="cl"><small>Facturé à</small><br><b>Studio Kora</b></div>
+        <table><tr><td>Identité visuelle</td><td>150 000 FCFA</td></tr><tr><td>Page d’accueil du site</td><td>90 000 FCFA</td></tr><tr><td>Retouches</td><td>25 000 FCFA</td></tr></table>
+        <div class="tot"><span>Total à payer</span><span>265 000 FCFA</span></div>
+        <div class="stamp">PAYÉE</div>
+      </div>
+      <div class="fl fl1 glass" aria-hidden="true"><small>Encaissé ce mois-ci</small><b>250 000 FCFA</b><span class="up">▲ +42 % · exemple</span></div>
+      <div class="fl fl2 glass" aria-hidden="true"><small>Objectif du mois</small><div class="bar"><i style="width:83%"></i></div><b>83 %</b></div>
     </div>
   </div>
 </div>
 
 <section id="outils"><div class="wrap">
-  <h2>Ce qu’il faut pour travailler sereinement, rien de plus.</h2>
+  <p class="eye rv">Fonctionnalités</p>
+  <h2 class="rv">Ce qu’il faut pour travailler sereinement, <span class="gt">rien de plus.</span></h2>
   <div class="grid">
-    <div class="card glass"><h3>Clients et prospects</h3><p>Suivez chaque contact, de la première discussion jusqu’au projet signé.</p></div>
-    <div class="card glass"><h3>Devis et factures</h3><p>Numérotation automatique, votre logo, votre TVA. Imprimez-les ou enregistrez-les en PDF.</p></div>
-    <div class="card glass"><h3>Revenus</h3><p>Un tableau de bord avec votre objectif mensuel et la courbe de votre activité.</p></div>
-    <div class="card glass"><h3>Tâches</h3><p>Notez ce qui reste à faire pour ne plus rien oublier de vos clients.</p></div>
+    <div class="card glass rv"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3>Clients et prospects</h3><p>Suivez chaque contact, de la première discussion jusqu’au projet signé.</p></div>
+    <div class="card glass rv"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h8M8 9h2"/></svg></div><h3>Devis et factures</h3><p>Numérotation automatique, votre logo, votre TVA. Imprimez-les ou enregistrez-les en PDF.</p></div>
+    <div class="card glass rv"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg></div><h3>Revenus</h3><p>Un tableau de bord avec votre objectif mensuel et la courbe de votre activité.</p></div>
+    <div class="card glass rv"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><h3>Tâches</h3><p>Notez ce qui reste à faire pour ne plus rien oublier de vos clients.</p></div>
   </div>
 </div></section>
 
 <section id="demarrer"><div class="wrap">
-  <h2>Prêt en quelques minutes.</h2>
+  <p class="eye rv">Démarrer</p>
+  <h2 class="rv">Prêt en <span class="gt">quelques minutes.</span></h2>
   <ol class="steps">
-    <li class="glass"><div><b>Créez votre compte</b><span>Une adresse e-mail et un mot de passe suffisent. Aucun paiement demandé.</span></div></li>
-    <li class="glass"><div><b>Testez pendant 7 jours</b><span>Ajoutez vos clients, créez un devis, envoyez une facture : tout est ouvert.</span></div></li>
-    <li class="glass"><div><b>Abonnez-vous quand vous êtes convaincu</b><span>Envoyez 5 000 FCFA par mobile money au <span class="num">+228 91 29 43 45</span>, puis saisissez le code reçu par SMS. Votre accès est activé après vérification.</span></div></li>
+    <li class="glass rv"><div><b>Créez votre compte</b><span>Une adresse e-mail et un mot de passe suffisent. Aucun paiement demandé.</span></div></li>
+    <li class="glass rv"><div><b>Testez pendant 7 jours</b><span>Ajoutez vos clients, créez un devis, envoyez une facture : tout est ouvert.</span></div></li>
+    <li class="glass rv"><div><b>Abonnez-vous quand vous êtes convaincu</b><span>Envoyez 5 000 FCFA par mobile money au <span class="num">+228 91 29 43 45</span>, puis saisissez le code reçu par SMS. Votre accès est activé après vérification.</span></div></li>
   </ol>
 </div></section>
 
 <section id="tarif"><div class="wrap">
-  <div class="price glass">
-    <div class="price-h"><h2>Un seul tarif, tout inclus.</h2><p style="color:var(--mut);margin:14px 0 22px">Pas de formule compliquée : vous avez accès à tous les outils.</p><div class="amount">5 000 FCFA<span> / mois</span></div><p style="color:var(--mut);margin:12px 0 0">Les 7 premiers jours sont gratuits.</p></div>
+  <div class="price rv"><div class="price-in">
+    <div><span class="rib">Tout inclus</span><h2>Un seul tarif, <span class="gt">tout inclus.</span></h2><p style="color:var(--mut);margin:14px 0 22px">Pas de formule compliquée : vous avez accès à tous les outils.</p><div class="amount">5 000 FCFA<span> / mois</span></div><p style="color:var(--mut);margin:12px 0 0">Les 7 premiers jours sont gratuits.</p></div>
     <div>
       <ul class="feat"><li>Clients et prospects</li><li>Devis et factures numérotés</li><li>Liste de tâches</li><li>Tableau de bord des revenus</li><li>Données sauvegardées sur votre compte</li></ul>
-      <p style="margin:22px 0 0"><a class="btn" href="app.html">Essayer gratuitement 7 jours</a></p>
+      <p style="margin:24px 0 0"><a class="btn" href="app.html#inscription">Essayer gratuitement 7 jours</a></p>
     </div>
-  </div>
+  </div></div>
 </div></section>
 
 <section id="faq"><div class="wrap">
-  <h2>Questions fréquentes</h2>
+  <p class="eye rv">FAQ</p>
+  <h2 class="rv">Questions fréquentes</h2>
   <details class="glass"><summary>Comment fonctionne l’essai gratuit ?</summary><p>Vous créez votre compte et vous avez accès à tout l’outil pendant 7 jours, sans payer. À la fin, vos données restent sur votre compte : vous les retrouvez dès que vous vous abonnez.</p></details>
   <details class="glass"><summary>Comment je paie l’abonnement ?</summary><p>Par mobile money, directement sur le numéro +228 91 29 43 45. Vous envoyez 5 000 FCFA, puis vous saisissez le code de la transaction dans l’application.</p></details>
   <details class="glass"><summary>Quand mon accès est-il activé ?</summary><p>Après la vérification de votre paiement. Une fois activé, appuyez sur « Actualiser mon accès » dans l’application.</p></details>
@@ -147,12 +204,18 @@ footer{padding:28px 0 40px;color:var(--mut);font-size:.9rem;text-align:center}
   <details class="glass"><summary>J’ai un problème, qui contacter ?</summary><p>Écrivez-nous sur <a href="https://wa.me/22891294345" target="_blank" rel="noopener">WhatsApp</a>, nous répondons directement.</p></details>
 </div></section>
 
-<section><div class="wrap"><div class="end glass">
+<section><div class="wrap"><div class="end rv">
   <h2>Gardez le fil de votre activité.</h2>
   <p>Créez votre compte et envoyez votre première facture aujourd’hui.</p>
-  <a class="btn" href="app.html">Essayer gratuitement 7 jours</a>
+  <a class="btn light" href="app.html#inscription">Essayer gratuitement 7 jours</a>
 </div></div></section>
 </main>
 <footer><div class="wrap">© 2026 Atelier Freelance · <a href="app.html">Se connecter</a></div></footer>
+<script>
+document.documentElement.classList.add("js");
+(function(){var els=document.querySelectorAll(".rv");if(!("IntersectionObserver"in window)){els.forEach(function(e){e.classList.add("in")});return}
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.12});
+els.forEach(function(e){io.observe(e)})})();
+</script>
 </body>
 </html>
